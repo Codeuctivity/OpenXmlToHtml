@@ -1,6 +1,7 @@
 ﻿using Codeuctivity;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,7 +37,9 @@ namespace OpenXmlToHtmlTests
                 return;
             }
 
-            var allowedDiffImage = $"{expectImageFilePath}.diff.png";
+            var osSpezificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
+
+            var allowedDiffImage = $"{expectImageFilePath}.diff.{osSpezificDiffFileSuffix}.png";
 
             if (File.Exists(allowedDiffImage))
             {
