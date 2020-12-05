@@ -1,6 +1,5 @@
 using Codeuctivity.OpenXmlToHtml;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -15,12 +14,6 @@ namespace OpenXmlToHtmlTests
         {
             var actualHtmlFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.html");
             var expectedHtmlFilePath = $"../../../ExpectedTestOutcome/{testFileName}.png";
-
-            // TODO fix diff between windows and linux
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && testFileName == "BasicTextFormated.docx")
-            {
-                expectedHtmlFilePath = $"../../../ExpectedTestOutcome/{testFileName}.Linux.png";
-            }
 
             if (File.Exists(actualHtmlFilePath))
             {
