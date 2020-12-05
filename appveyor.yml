@@ -1,0 +1,39 @@
+version: 1.0.{build}
+image:
+  - Ubuntu
+  - Visual Studio 2019
+skip_tags: true
+configuration: Release
+before_build:
+  - ps: dotnet restore
+build:
+  project: OpenXmlToHtml.sln
+  publish_nuget: true
+  publish_nuget_symbols: true
+  use_snupkg_format: true
+  verbosity: minimal
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: "{version}"
+  package_version: "{version}-prerelease"
+  assembly_version: "{version}"
+  file_version: "{version}"
+  informational_version: "{version}"
+
+artifacts:
+  - path: 'OpenXmlToHtml.*.*nupkg'
+
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: TODO
+    skip_symbols: false
+    on:
+      branch: master
+  - provider: GitHub
+    auth_token:
+      secure: TODO
+    on:
+      branch: master
