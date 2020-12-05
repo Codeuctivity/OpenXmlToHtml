@@ -9,8 +9,17 @@ using System.Xml.Linq;
 
 namespace Codeuctivity.OpenXmlToHtml
 {
+    /// <summary>
+    ///  Converts docx to html
+    /// </summary>
     public static class OpenXmlToHtml
     {
+        /// <summary>
+        /// Converts docx to html
+        /// </summary>
+        /// <param name="sourceOpenXmlFilePath"></param>
+        /// <param name="destinationHtmlFilePath"></param>
+        /// <returns></returns>
         public static async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath)
         {
             if (!File.Exists(sourceOpenXmlFilePath))
@@ -19,12 +28,28 @@ namespace Codeuctivity.OpenXmlToHtml
             }
 
             using var sourceIpenXml = new FileStream(sourceOpenXmlFilePath, FileMode.Open);
-            using var html = await ConvertToHtmlAsync(sourceIpenXml).ConfigureAwait(false);
+            using var html = await ConvertToHtmlAsync(sourceIpenXml, sourceOpenXmlFilePath).ConfigureAwait(false);
             using var destinationHtmlFile = new FileStream(destinationHtmlFilePath, FileMode.CreateNew, FileAccess.Write);
             await html.CopyToAsync(destinationHtmlFile).ConfigureAwait(false);
         }
 
-        public static async Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string sourceOpenXmlFilePath = "")
+        /// <summary>
+        /// Converts docx to html
+        /// </summary>
+        /// <param name="sourceOpenXml"></param>
+        /// <returns></returns>
+        public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
+        {
+            return ConvertToHtmlAsync(sourceOpenXml, string.Empty);
+        }
+
+        /// <summary>
+        /// Converts docx to html
+        /// </summary>
+        /// <param name="sourceOpenXml"></param>
+        /// <param name="fallbackPageTitle"></param>
+        /// <returns></returns>
+        public static async Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
         {
             if (sourceOpenXml == null)
             {
@@ -40,7 +65,7 @@ namespace Codeuctivity.OpenXmlToHtml
 
             using var wordProcessingDocument = WordprocessingDocument.Open(sourceOpenXml, true);
             var coreFilePropertiesPart = wordProcessingDocument.CoreFilePropertiesPart;
-            var pageTitle = (string)coreFilePropertiesPart?.GetXDocument().Descendants(DC.title).FirstOrDefault() ?? sourceOpenXmlFilePath;
+            var pageTitle = (string)coreFilePropertiesPart?.GetXDocument().Descendants(DC.title).FirstOrDefault() ?? fallbackPageTitle;
 
             // TODO: Determine max-width from size of content area.
             var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle));
