@@ -34,12 +34,22 @@ namespace Codeuctivity.OpenXmlToHtml
         }
 
         /// <summary>
-        ///  Converts docx to html
+        /// Converts docx to html
+        /// </summary>
+        /// <param name="sourceOpenXml"></param>
+        /// <returns></returns>
+        public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
+        {
+            return ConvertToHtmlAsync(sourceOpenXml, string.Empty);
+        }
+
+        /// <summary>
+        /// Converts docx to html
         /// </summary>
         /// <param name="sourceOpenXml"></param>
         /// <param name="fallbackPageTitle"></param>
         /// <returns></returns>
-        public static async Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle = "")
+        public static async Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
         {
             if (sourceOpenXml == null)
             {
