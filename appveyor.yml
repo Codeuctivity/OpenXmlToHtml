@@ -38,7 +38,7 @@ deploy:
     auth_token:
       secure: vDre9Q+oDuJgifWTngorMKiWwJox+L6TzglqQuTjFz9wZuzbjGPg4soPAsR19MLm
     artifacts:
-    - path: OpenXmlToHtmlCli.exe
-      name: OpenXmlToHtmlCli
+      - path: OpenXmlToHtmlCli.exe
+        name: OpenXmlToHtmlCli
     on:
       branch: main
