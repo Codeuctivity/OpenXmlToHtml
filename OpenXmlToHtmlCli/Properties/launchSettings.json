@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OpenXmlToHtmlCli": {
+      "commandName": "Project",
+      "commandLineArgs": "source.docx destination.html"
+    }
+  }
+}

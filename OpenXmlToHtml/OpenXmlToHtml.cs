@@ -85,16 +85,16 @@ namespace Codeuctivity.OpenXmlToHtml
                 AdditionalCss = "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }",
                 PageTitle = pageTitle,
                 FabricateCssClasses = true,
-                CssClassPrefix = "pt-",
+                CssClassPrefix = "Codeuctivity-",
                 RestrictToSupportedLanguages = false,
                 RestrictToSupportedNumberingFormats = false,
                 ImageHandler = imageInfo =>
                 {
                     using var memoryStream = new MemoryStream();
-                    imageInfo.Bitmap.Save(memoryStream, null);
+                    imageInfo.Bitmap.Save(memoryStream, imageInfo.Bitmap.RawFormat);
                     var base64 = Convert.ToBase64String(memoryStream.ToArray());
                     var format = imageInfo.Bitmap.RawFormat;
-                    var codec = ImageCodecInfo.GetImageDecoders().First<ImageCodecInfo>(c => c.FormatID == format.Guid);
+                    var codec = ImageCodecInfo.GetImageDecoders().First(imageCodecInfo => imageCodecInfo.FormatID == format.Guid);
                     var mimeType = codec.MimeType;
 
                     var imageSource = $"data:{mimeType};base64,{base64}";
