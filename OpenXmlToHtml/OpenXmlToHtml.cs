@@ -27,7 +27,7 @@ namespace Codeuctivity.OpenXmlToHtml
                 throw new FileNotFoundException(sourceOpenXmlFilePath);
             }
 
-            using var sourceIpenXml = new FileStream(sourceOpenXmlFilePath, FileMode.Open);
+            using var sourceIpenXml = new FileStream(sourceOpenXmlFilePath, FileMode.Open, FileAccess.Read);
             using var html = await ConvertToHtmlAsync(sourceIpenXml, sourceOpenXmlFilePath).ConfigureAwait(false);
             using var destinationHtmlFile = new FileStream(destinationHtmlFilePath, FileMode.CreateNew, FileAccess.Write);
             await html.CopyToAsync(destinationHtmlFile).ConfigureAwait(false);
@@ -56,12 +56,9 @@ namespace Codeuctivity.OpenXmlToHtml
                 throw new ArgumentNullException(nameof(sourceOpenXml));
             }
 
-            if (!sourceOpenXml.CanSeek)
-            {
-                var memoryStream = new MemoryStream();
-                await sourceOpenXml.CopyToAsync(memoryStream).ConfigureAwait(false);
-                sourceOpenXml = memoryStream;
-            }
+            using var memoryStream = new MemoryStream();
+            await sourceOpenXml.CopyToAsync(memoryStream).ConfigureAwait(false);
+            sourceOpenXml = memoryStream;
 
             using var wordProcessingDocument = WordprocessingDocument.Open(sourceOpenXml, true);
             var coreFilePropertiesPart = wordProcessingDocument.CoreFilePropertiesPart;

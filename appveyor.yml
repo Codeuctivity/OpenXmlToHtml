@@ -25,7 +25,11 @@ dotnet_csproj:
   informational_version: "{version}"
 
 artifacts:
-  - path: 'OpenXmlToHtml.*.*nupkg'
+  - path: OpenXmlToHtml\bin\Release\OpenXmlToHtml.*.*nupkg
+    name: OpenXmlToHtmlNuget
+
+  - path: OpenXmlToHtmlCli\bin\publish
+    name: OpenXmlToHtmlCli
 
 deploy:
   - provider: NuGet
@@ -34,9 +38,10 @@ deploy:
     skip_symbols: false
     on:
       branch: main
+    artifact: /.*(\.|\.s)nupkg/
   - provider: GitHub
     auth_token:
       secure: vDre9Q+oDuJgifWTngorMKiWwJox+L6TzglqQuTjFz9wZuzbjGPg4soPAsR19MLm
-    artifacts: OpenXmlToHtmlCli.exe
+    artifact: OpenXmlToHtmlNuget,OpenXmlToHtmlCli
     on:
       branch: main
