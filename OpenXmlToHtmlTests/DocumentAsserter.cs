@@ -1,4 +1,5 @@
 ﻿using Codeuctivity;
+using Codeuctivity.PuppeteerSharp;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -15,7 +16,7 @@ namespace OpenXmlToHtmlTests
             var expectFullPath = Path.GetFullPath(expectReferenceFilePath);
 
             Assert.True(File.Exists(actualFullPath), $"actualFilePath not found {actualFullPath}");
-            await using var chromiumRenderer = await ChromiumRenderer.CreateAsync();
+            await using var chromiumRenderer = await Renderer.CreateAsync();
             var pathRasterizedHtml = actualFilePath + ".png";
             await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
 
@@ -37,18 +38,15 @@ namespace OpenXmlToHtmlTests
                 return;
             }
 
-            var osSpezificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
+            var osSpecificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
 
-            var allowedDiffImage = $"{expectFullPath}.diff.{osSpezificDiffFileSuffix}.png";
+            var allowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
 
             if (File.Exists(allowedDiffImage))
             {
                 var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
-
-                if (result.AbsoluteError == 0)
-                {
-                    return;
-                }
+                Assert.True(result.PixelErrorCount < 40, $"Expected PixelErrorCount beyond 40 but was {result.PixelErrorCount}");
+                return;
             }
 
             var newDiffImage = $"{actualFullPath}.diff.png";

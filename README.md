@@ -12,3 +12,17 @@ Converts docx to html
 ``` c#
 await OpenXmlToHtml.ConvertToHtmlAsync(inputPathDocx, outputPathHtml);
 ```
+
+## Linux
+
+``` bash
+sudo apt install libgdiplus -y 
+```
+
+### Fonts and Linux - WIP Section
+
+Some default fonts used in many docx can be installed on linux usind
+
+``` bash
+sudo apt install ttf-mscorefonts-installer -y && sudo fc-cache -vr
+```
