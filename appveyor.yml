@@ -25,10 +25,7 @@ dotnet_csproj:
   informational_version: "{version}"
 
 artifacts:
-  - path: OpenXmlToHtml\bin\Release\OpenXmlToHtml.*.*nupkg
-    name: OpenXmlToHtmlNuget
-
-  - path: OpenXmlToHtmlCli\bin\publish
+  - path: OpenXmlToHtmlClibin/Release/netcoreapp3.1/publish/
     name: OpenXmlToHtmlCli
 
 deploy:

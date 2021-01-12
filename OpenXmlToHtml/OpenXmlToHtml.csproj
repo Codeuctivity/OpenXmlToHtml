@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-    <PackageReference Include="OpenXmlPowerToolsStandard" Version="5.0.37-prerelease" />
+    <PackageReference Include="OpenXmlPowerToolsStandard" Version="5.0.51-prerelease" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="8.16.0.25740">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
