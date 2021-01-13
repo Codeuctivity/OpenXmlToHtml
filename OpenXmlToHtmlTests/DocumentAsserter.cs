@@ -54,7 +54,7 @@ namespace OpenXmlToHtmlTests
             {
                 var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
 
-                Assert.True(result.PixelErrorCount < 40, $"Expected PixelErrorCount beyond 40 but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
+                Assert.True(result.PixelErrorCount < 51, $"Expected PixelErrorCount beyond 50 but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
                 return;
             }
 
