@@ -1,4 +1,5 @@
 ﻿using Codeuctivity;
+using Codeuctivity.PuppeteerSharp;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -15,7 +16,7 @@ namespace OpenXmlToHtmlTests
             var expectFullPath = Path.GetFullPath(expectReferenceFilePath);
 
             Assert.True(File.Exists(actualFullPath), $"actualFilePath not found {actualFullPath}");
-            await using var chromiumRenderer = await ChromiumRenderer.CreateAsync();
+            await using var chromiumRenderer = await Renderer.CreateAsync();
             var pathRasterizedHtml = actualFilePath + ".png";
             await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
 
@@ -31,35 +32,32 @@ namespace OpenXmlToHtmlTests
 
             Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
+            var base64fyedActualImage = Convert.ToBase64String(File.ReadAllBytes(actualFullPath));
 
             if (ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath))
             {
                 return;
             }
 
-            var osSpezificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
+            var osSpecificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
 
-            var allowedDiffImage = $"{expectFullPath}.diff.{osSpezificDiffFileSuffix}.png";
-
-            if (File.Exists(allowedDiffImage))
-            {
-                var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
-
-                if (result.AbsoluteError == 0)
-                {
-                    return;
-                }
-            }
-
+            var allowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
             var newDiffImage = $"{actualFullPath}.diff.png";
             using (var fileStreamDifferenceMask = File.Create(newDiffImage))
             using (var maskImage = ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
             {
                 SixLabors.ImageSharp.ImageExtensions.SaveAsPng(maskImage, fileStreamDifferenceMask);
             }
-
-            var base64fyedActualImage = Convert.ToBase64String(File.ReadAllBytes(actualFullPath));
             var base64fyedImageDiff = Convert.ToBase64String(File.ReadAllBytes(newDiffImage));
+
+            if (File.Exists(allowedDiffImage))
+            {
+                var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
+
+                Assert.True(result.PixelErrorCount < 51, $"Expected PixelErrorCount beyond 50 but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
+                return;
+            }
+
             Assert.True(ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath), $"Expected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
         }
     }
