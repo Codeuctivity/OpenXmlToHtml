@@ -32,6 +32,7 @@ namespace OpenXmlToHtmlTests
 
             Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
+            var base64fyedActualImage = Convert.ToBase64String(File.ReadAllBytes(actualFullPath));
 
             if (ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath))
             {
@@ -41,23 +42,22 @@ namespace OpenXmlToHtmlTests
             var osSpecificDiffFileSuffix = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" : "win";
 
             var allowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
-
-            if (File.Exists(allowedDiffImage))
-            {
-                var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
-                Assert.True(result.PixelErrorCount < 40, $"Expected PixelErrorCount beyond 40 but was {result.PixelErrorCount}");
-                return;
-            }
-
             var newDiffImage = $"{actualFullPath}.diff.png";
             using (var fileStreamDifferenceMask = File.Create(newDiffImage))
             using (var maskImage = ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
             {
                 SixLabors.ImageSharp.ImageExtensions.SaveAsPng(maskImage, fileStreamDifferenceMask);
             }
-
-            var base64fyedActualImage = Convert.ToBase64String(File.ReadAllBytes(actualFullPath));
             var base64fyedImageDiff = Convert.ToBase64String(File.ReadAllBytes(newDiffImage));
+
+            if (File.Exists(allowedDiffImage))
+            {
+                var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
+
+                Assert.True(result.PixelErrorCount < 40, $"Expected PixelErrorCount beyond 40 but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
+                return;
+            }
+
             Assert.True(ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath), $"Expected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
         }
     }

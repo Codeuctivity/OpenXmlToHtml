@@ -49,20 +49,26 @@ namespace Codeuctivity.OpenXmlToHtml
         /// <param name="sourceOpenXml"></param>
         /// <param name="fallbackPageTitle"></param>
         /// <returns></returns>
-        public static async Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
+        public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
         {
             if (sourceOpenXml == null)
             {
                 throw new ArgumentNullException(nameof(sourceOpenXml));
             }
 
+            return ConvertToHtmlInternalAsync(sourceOpenXml, fallbackPageTitle);
+        }
+
+        private static async Task<Stream> ConvertToHtmlInternalAsync(Stream sourceOpenXml, string fallbackPageTitle)
+        {
             using var memoryStream = new MemoryStream();
             await sourceOpenXml.CopyToAsync(memoryStream).ConfigureAwait(false);
             sourceOpenXml = memoryStream;
 
             using var wordProcessingDocument = WordprocessingDocument.Open(sourceOpenXml, true);
             var coreFilePropertiesPart = wordProcessingDocument.CoreFilePropertiesPart;
-            var pageTitle = (string)coreFilePropertiesPart?.GetXDocument().Descendants(DC.title).FirstOrDefault() ?? fallbackPageTitle;
+            var computedPageTitle = coreFilePropertiesPart?.GetXDocument().Descendants(DC.title).FirstOrDefault();
+            var pageTitle = computedPageTitle == null ? fallbackPageTitle : computedPageTitle.ToString();
 
             var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle));
 
@@ -76,13 +82,15 @@ namespace Codeuctivity.OpenXmlToHtml
 
         private static WmlToHtmlConverterSettings CreateHtmlConverterSettings(string pageTitle)
         {
-            var settings = new WmlToHtmlConverterSettings(new DefaultImageHandler(), new WordprocessingTextSymbolToUnicodeHandler());
-            settings.AdditionalCss = "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }";
-            settings.PageTitle = pageTitle;
-            settings.FabricateCssClasses = true;
-            settings.CssClassPrefix = "Codeuctivity-";
-            settings.RestrictToSupportedLanguages = false;
-            settings.RestrictToSupportedNumberingFormats = false;
+            var settings = new WmlToHtmlConverterSettings(new DefaultImageHandler(), new WordprocessingTextSymbolToUnicodeHandler())
+            {
+                AdditionalCss = "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }",
+                PageTitle = pageTitle,
+                FabricateCssClasses = true,
+                CssClassPrefix = "Codeuctivity-",
+                RestrictToSupportedLanguages = false,
+                RestrictToSupportedNumberingFormats = false
+            };
             return settings;
         }
     }
