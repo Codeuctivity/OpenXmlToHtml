@@ -25,7 +25,7 @@ dotnet_csproj:
   informational_version: "{version}"
 
 artifacts:
-  - path: '**\publish'
+  - path: OpenXmlToHtmlCli/bin/Release/net5.0/win-x64/publish
     name: OpenXmlToHtmlCli
   - path: '**\*.*nupkg'
     name: OpenXmlToHtmlNuget
@@ -41,6 +41,6 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: vDre9Q+oDuJgifWTngorMKiWwJox+L6TzglqQuTjFz9wZuzbjGPg4soPAsR19MLm
-    artifact: OpenXmlToHtmlNuget,OpenXmlToHtmlCli
+    artifact: OpenXmlToHtmlCli,OpenXmlToHtmlNuget
     on:
       branch: main
