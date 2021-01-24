@@ -1,7 +1,9 @@
 using Codeuctivity.OpenXmlToHtml;
+using OpenXmlPowerTools;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Xunit;
 
 namespace OpenXmlToHtmlTests
@@ -9,7 +11,7 @@ namespace OpenXmlToHtmlTests
     public class OpenXmlToHtmlTests
     {
         [Theory]
-        // [InlineData("WingdingsSymbols.docx")]
+        [InlineData("WingdingsSymbols.docx")]
         [InlineData("EmptyDocument.docx")]
         [InlineData("BasicTextFormated.docx")]
         [InlineData("Images.docx")]
@@ -41,6 +43,20 @@ namespace OpenXmlToHtmlTests
             var actual = WordprocessingTextSymbolToUnicodeHandler.TransformText(original, currentStyle);
 
             Assert.Equal(expectedEquivalent, actual);
+        }
+
+        [Fact]
+        public void ShouldTranslateSymbolsToUnicodeWithDefaultSymbolHandler()
+        {
+            Dictionary<string, string> fontFamily = new Dictionary<string, string>();
+            fontFamily.Add("font-family", "Symbol");
+            var defaultSymbolHandler = new SymbolHandler();
+
+            var element = new XElement("symbol", new XAttribute(W._char, ""));
+
+            var actual = defaultSymbolHandler.TransformSymbol(element, fontFamily);
+
+            // Assert.Equal("<span xmlns=\"http://www.w3.org/1999/xhtml\">•</span>", actual.ToString());
         }
     }
 }

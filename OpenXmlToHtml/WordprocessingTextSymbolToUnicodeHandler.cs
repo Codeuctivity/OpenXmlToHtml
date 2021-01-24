@@ -8,7 +8,7 @@ namespace Codeuctivity.OpenXmlToHtml
     /// </summary>
     public class WordprocessingTextSymbolToUnicodeHandler : IWordprocessingTextHandler
     {
-        private static readonly Dictionary<char, char> WingdingsToUnicode = new Dictionary<char, char>
+        public static readonly Dictionary<char, char> WingdingsToUnicode = new Dictionary<char, char>
         {
             { '','•' }
         };

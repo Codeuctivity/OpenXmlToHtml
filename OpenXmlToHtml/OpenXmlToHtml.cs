@@ -82,8 +82,9 @@ namespace Codeuctivity.OpenXmlToHtml
 
         private static WmlToHtmlConverterSettings CreateHtmlConverterSettings(string pageTitle)
         {
-            var settings = new WmlToHtmlConverterSettings(new DefaultImageHandler(), new WordprocessingTextSymbolToUnicodeHandler())
+            var settings = new WmlToHtmlConverterSettings(new DefaultImageHandler(), new WordprocessingTextSymbolToUnicodeHandler(), new SymbolHandler())
             {
+                GeneralCss =string.Empty,
                 AdditionalCss = "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }",
                 PageTitle = pageTitle,
                 FabricateCssClasses = true,
