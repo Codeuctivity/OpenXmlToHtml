@@ -52,7 +52,7 @@ namespace OpenXmlToHtmlTests
             fontFamily.Add("font-family", "Symbol");
             var defaultSymbolHandler = new SymbolHandler();
 
-            var element = new XElement("symbol", new XAttribute(W.char, ""));
+            var element = new XElement("symbol", new XAttribute(W._char, ""));
 
             var actual = defaultSymbolHandler.TransformSymbol(element, fontFamily);
 
