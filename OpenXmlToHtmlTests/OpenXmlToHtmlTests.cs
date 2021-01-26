@@ -27,14 +27,13 @@ namespace OpenXmlToHtmlTests
             }
 
             await OpenXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
-
             await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath);
         }
 
         [Theory]
         [InlineData("1", "•1", "Symbol")]
         [InlineData("1", "1", "arial")]
-        public void ShouldTranslateToUnicode(string original, string expectedEquivalent, string fontFamily)
+        public void ShouldTranslateTextWithCustomGlyphToUnicode(string original, string expectedEquivalent, string fontFamily)
         {
             var currentStyle = new Dictionary<string, string> { { "font-family", fontFamily } };
 
@@ -46,17 +45,19 @@ namespace OpenXmlToHtmlTests
         }
 
         [Fact]
-        public void ShouldTranslateSymbolsToUnicodeWithDefaultSymbolHandler()
+        public void ShouldTranslateSymbolsToUnicode()
         {
-            Dictionary<string, string> fontFamily = new Dictionary<string, string>();
-            fontFamily.Add("font-family", "Symbol");
-            var defaultSymbolHandler = new SymbolHandler();
+            var fontFamily = new Dictionary<string, string>
+            {
+                { "font-family", "Symbol" }
+            };
 
+            var defaultSymbolHandler = new SymbolHandler();
             var element = new XElement("symbol", new XAttribute(W._char, ""));
 
             var actual = defaultSymbolHandler.TransformSymbol(element, fontFamily);
 
-            // Assert.Equal("<span xmlns=\"http://www.w3.org/1999/xhtml\">•</span>", actual.ToString());
+            Assert.Equal("<span xmlns=\"http://www.w3.org/1999/xhtml\">•</span>", actual.ToString());
         }
     }
 }

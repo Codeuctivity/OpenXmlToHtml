@@ -1,26 +1,250 @@
+using OpenXmlPowerTools;
+using OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-using System;
-using OpenXmlPowerTools;
-using OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
-
 namespace Codeuctivity.OpenXmlToHtml
 {
-
     /// <summary>
     /// Default handler that transforms every symbol into some html encoded font specific char
     /// </summary>
     public class SymbolHandler : IWordprocessingSymbolHandler
     {
-                private DefaultSymbolHandler DefaultSymbolHandler { get; set; }
-        private WordprocessingTextSymbolToUnicodeHandler WordprocessingTextSymbolToUnicodeHandler { get; set; }
+        private static readonly Dictionary<string, string> symbolCharDictonary = new Dictionary<string, string>
+    {
+            {"F020"," "},
+            {"F021","!"},
+            {"F022","∀"},
+            {"F023","#"},
+            {"F024","∃"},
+            {"F025","%"},
+            {"F026","&"},
+            {"F027","∋"},
+            {"F028","("},
+            {"F029",")"},
+            {"F02A","*"},
+            {"F02B","+"},
+            {"F02C",","},
+            {"F02D","-"},
+            {"F02E","."},
+            {"F02F","/"},
+            {"F030","0"},
+            {"F031","1"},
+            {"F032","2"},
+            {"F033","3"},
+            {"F034","4"},
+            {"F035","5"},
+            {"F036","6"},
+            {"F037","7"},
+            {"F038","8"},
+            {"F039","9"},
+            {"F03A",":"},
+            {"F03B",";"},
+            {"F03C","<"},
+            {"F03D","="},
+            {"F03E","?"},
+            {"F03F","≅"},
+            {"F040","A"},
+            {"F041","B"},
+            {"F042","X"},
+            {"F043","Δ"},
+            {"F044","E"},
+            {"F045","Φ"},
+            {"F046","Γ"},
+            {"F047","H"},
+            {"F048","I"},
+            {"F049","ϑ"},
+            {"F04A","K"},
+            {"F04B","∧"},
+            {"F04C","M"},
+            {"F04D","N"},
+            {"F04E","O"},
+            {"F04F","Π"},
+            {"F050","Θ"},
+            {"F051","P"},
+            {"F052","∑"},
+            {"F053","T"},
+            {"F054","Y"},
+            {"F055","Ω"},
+            {"F056","Ξ"},
+            {"F057","Ψ"},
+            {"F058","Z"},
+            {"F059","["},
+            {"F05A","∴"},
+            {"F05B","]"},
+            {"F05C","⊥"},
+            {"F05D","_"},
+            {"F05E","α"},
+            {"F05F","β"},
+            {"F060","χ"},
+            {"F061","δ"},
+            {"F062","ε"},
+            {"F063","ϕ"},
+            {"F064","γ"},
+            {"F065","η"},
+            {"F066","ι"},
+            {"F067","φ"},
+            {"F068","κ"},
+            {"F069","λ"},
+            {"F06A","μ"},
+            {"F06B","ν"},
+            {"F06C","ο"},
+            {"F06D","π"},
+            {"F06E","θ"},
+            {"F06F","ρ"},
+            {"F070","σ"},
+            {"F071","τ"},
+            {"F072","υ"},
+            {"F073","ϖ"},
+            {"F074","ω"},
+            {"F075","ξ"},
+            {"F076","ψ"},
+            {"F077","ζ"},
+            {"F078","{"},
+            {"F079","|"},
+            {"F07A","}"},
+            {"F07B","~"},
+            {"F07C","□"},
+            {"F07D","⓪"},
+            {"F07E","①"},
+            {"F07F","②"},
+            {"F080","③"},
+            {"F081","④"},
+            {"F082","⑤"},
+            {"F083","⑥"},
+            {"F084","⑦"},
+            {"F085","⑧"},
+            {"F086","⑨"},
+            {"F087","⑩"},
+            {"F088","⓿"},
+            {"F089","❶"},
+            {"F08A","❷"},
+            {"F08B","❸"},
+            {"F08C","❹"},
+            {"F08D","❺"},
+            {"F08E","❻"},
+            {"F08F","❼"},
+            {"F090","❽"},
+            {"F091","❾"},
+            {"F092","❿"},
+            {"F093","🙢"},
+            {"F094","🙠"},
+            {"F095","🙡"},
+            {"F096","🙣"},
+            {"F097","🙞"},
+            {"F098","🙜"},
+            {"F099","🙝"},
+            {"F09A","🙟"},
+            {"F09B","·"},
+            {"F09C","•"},
+            {"F0A0","▪"},
+            {"F0A1","ϒ"},
+            {"F0A2","′"},
+            {"F0A3","≤"},
+            {"F0A4","/"},
+            {"F0A5","∞"},
+            //{"F0A6","Todo"},
+            //{"F0A7","Todo"},
+            //{"F0A8","Todo"},
+            //{"F0A9","Todo"},
+            //{"F0AA","Todo"},
+            //{"F0AB","Todo"},
+            //{"F0AC","Todo"},
+            //{"F0AD","Todo"},
+            //{"F0AE","Todo"},
+            //{"F0AF","Todo"},
+            //{"F0B0","Todo"},
+            //{"F0B1","Todo"},
+            //{"F0B2","Todo"},
+            //{"F0B3","Todo"},
+            //{"F0B4","Todo"},
+            //{"F0B5","Todo"},
+            //{"F0B6","Todo"},
+            //{"F0B7","Todo"},
+            //{"F0B8","Todo"},
+            //{"F0B9","Todo"},
+            //{"F0BA","Todo"},
+            //{"F0BB","Todo"},
+            //{"F0BC","Todo"},
+            //{"F0BD","Todo"},
+            //{"F0BE","Todo"},
+            //{"F0BF","Todo"},
+            //{"F0C0","Todo"},
+            //{"F0C1","Todo"},
+            //{"F0C2","Todo"},
+            //{"F0C3","Todo"},
+            //{"F0C4","Todo"},
+            //{"F0C5","Todo"},
+            //{"F0C6","Todo"},
+            //{"F0C7","Todo"},
+            //{"F0C8","Todo"},
+            //{"F0C9","Todo"},
+            //{"F0CA","Todo"},
+            //{"F0CB","Todo"},
+            //{"F0CC","Todo"},
+            //{"F0CD","Todo"},
+            //{"F0CE","Todo"},
+            //{"F0CF","Todo"},
+            //{"F0D0","Todo"},
+            //{"F0D1","Todo"},
+            //{"F0D2","Todo"},
+            //{"F0D3","Todo"},
+            //{"F0D4","Todo"},
+            //{"F0D5","Todo"},
+            //{"F0D6","Todo"},
+            //{"F0D7","Todo"},
+            //{"F0D8","Todo"},
+            //{"F0D9","Todo"},
+            //{"F0DA","Todo"},
+            //{"F0DB","Todo"},
+            //{"F0DC","Todo"},
+            //{"F0DD","Todo"},
+            //{"F0DE","Todo"},
+            //{"F0DF","Todo"},
+            //{"F0E0","Todo"},
+            //{"F0E1","Todo"},
+            //{"F0E2","Todo"},
+            //{"F0E3","Todo"},
+            //{"F0E4","Todo"},
+            //{"F0E5","Todo"},
+            //{"F0E6","Todo"},
+            //{"F0E7","Todo"},
+            //{"F0E8","Todo"},
+            //{"F0E9","Todo"},
+            //{"F0EA","Todo"},
+            //{"F0EB","Todo"},
+            //{"F0EC","Todo"},
+            //{"F0ED","Todo"},
+            //{"F0EE","Todo"},
+            //{"F0EF","Todo"},
+            //{"F0F0","Todo"},
+            //{"F0F1","Todo"},
+            //{"F0F2","Todo"},
+            //{"F0F3","Todo"},
+            //{"F0F4","Todo"},
+            //{"F0F5","Todo"},
+            //{"F0F6","Todo"},
+            //{"F0F7","Todo"},
+            //{"F0F8","Todo"},
+            //{"F0F9","Todo"},
+            //{"F0FA","Todo"},
+            //{"F0FB","Todo"},
+            //{"F0FC","Todo"},
+            //{"F0FD","Todo"},
+            //{"F0FE","Todo"},
+            //{"F0FF","Todo"}
+    };
 
+        private DefaultSymbolHandler DefaultSymbolHandler { get; set; }
+
+        /// <summary>
+        /// Default ctor
+        /// </summary>
         public SymbolHandler()
         {
             DefaultSymbolHandler = new DefaultSymbolHandler();
-            WordprocessingTextSymbolToUnicodeHandler = new WordprocessingTextSymbolToUnicodeHandler();
         }
+
         /// <summary>
         /// Default handler that transforms every symbol into some html encoded font specific char
         /// </summary>
@@ -31,14 +255,12 @@ namespace Codeuctivity.OpenXmlToHtml
         {
             if (fontFamily.TryGetValue("font-family", out var currentFontFamily) && currentFontFamily == "Symbol")
             {
-                // var cs = (string)element.Attribute(W._char);
+                var customChar = element.Attribute(W._char).Value;
 
-                // foreach (var item in WordprocessingTextSymbolToUnicodeHandler.WingdingsToUnicode)
-                // {
-                var     cs = ('\u206F').ToString();
-                // }
-                    //  var c = Convert.ToInt32(cs, 16);
-            return new XElement(Xhtml.span,  "🤩");
+                if (symbolCharDictonary.TryGetValue(customChar, out var commonChar))
+                {
+                    return new XElement(Xhtml.span, commonChar);
+                }
             }
 
             return DefaultSymbolHandler.TransformSymbol(element, fontFamily);
