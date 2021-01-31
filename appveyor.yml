@@ -13,7 +13,7 @@ build:
   use_snupkg_format: true
   verbosity: minimal
 install:
-- sh: sudo apt-get install ttf-mscorefonts-installer -y && sudo fc-cache -vr
+- sh: sudo dpkg-reconfigure debconf -f noninteractive -p critical && sudo apt-get install ttf-mscorefonts-installer -y && sudo fc-cache -vr
 after_build:
   - ps: dotnet publish .\OpenXmlToHtmlCli -p:PublishProfile=OpenXmlToHtmlCliWindows
 
