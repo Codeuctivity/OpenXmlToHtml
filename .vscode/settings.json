@@ -8,5 +8,6 @@
         "Rgba",
         "nupkg",
         "snupkg"
-    ]
+    ],
+    "editor.formatOnSave": true
 }

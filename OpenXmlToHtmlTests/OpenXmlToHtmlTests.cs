@@ -52,12 +52,12 @@ namespace OpenXmlToHtmlTests
                 { "font-family", "Symbol" }
             };
 
-            var defaultSymbolHandler = new SymbolHandler();
-            var element = new XElement("symbol", new XAttribute(W._char, ""));
+            var symbolHandler = new SymbolHandler();
+            var element = new XElement("symbol", new XAttribute(W._char, "F0D7"));
 
-            var actual = defaultSymbolHandler.TransformSymbol(element, fontFamily);
+            var actual = symbolHandler.TransformSymbol(element, fontFamily);
 
-            Assert.Equal("<span xmlns=\"http://www.w3.org/1999/xhtml\">•</span>", actual.ToString());
+            Assert.Equal("<span xmlns=\"http://www.w3.org/1999/xhtml\">⋅</span>", actual.ToString());
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Codeuctivity.OpenXmlToHtml
         /// <summary>
         /// Dictonary used to translate symbol chars to unicode
         /// </summary>
-        public static readonly Dictionary<char, char> SymbolToUnicode = new Dictionary<char, char>
+        private static readonly Dictionary<char, char> SymbolToUnicode = new Dictionary<char, char>
         {
             { '','•' }
         };

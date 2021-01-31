@@ -72,7 +72,7 @@ namespace Codeuctivity.OpenXmlToHtml
 
             var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle));
 
-            var html = new XDocument(new XDocumentType("html", null, null, null), htmlElement);
+            var html = new XDocument(new XDocumentType("html", String.Empty, String.Empty, String.Empty), htmlElement);
 
             var memoryStreamHtml = new MemoryStream();
             html.Save(memoryStreamHtml);
@@ -84,7 +84,7 @@ namespace Codeuctivity.OpenXmlToHtml
         {
             var settings = new WmlToHtmlConverterSettings(new DefaultImageHandler(), new WordprocessingTextSymbolToUnicodeHandler(), new SymbolHandler())
             {
-                GeneralCss =string.Empty,
+                GeneralCss = string.Empty,
                 AdditionalCss = "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }",
                 PageTitle = pageTitle,
                 FabricateCssClasses = true,
