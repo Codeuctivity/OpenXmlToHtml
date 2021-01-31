@@ -19,7 +19,7 @@ namespace Codeuctivity.OpenXmlToHtml
         /// </summary>
         /// <param name="sourceOpenXmlFilePath"></param>
         /// <param name="destinationHtmlFilePath"></param>
-        /// <returns></returns>
+        /// <returns>selfContainedHtmlFilePath</returns>
         public static async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath)
         {
             if (!File.Exists(sourceOpenXmlFilePath))
@@ -33,11 +33,12 @@ namespace Codeuctivity.OpenXmlToHtml
             await html.CopyToAsync(destinationHtmlFile).ConfigureAwait(false);
         }
 
+
         /// <summary>
         /// Converts docx to html
         /// </summary>
         /// <param name="sourceOpenXml"></param>
-        /// <returns></returns>
+        /// <returns>selfContainedHtml</returns>
         public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
         {
             return ConvertToHtmlAsync(sourceOpenXml, string.Empty);
@@ -48,7 +49,7 @@ namespace Codeuctivity.OpenXmlToHtml
         /// </summary>
         /// <param name="sourceOpenXml"></param>
         /// <param name="fallbackPageTitle"></param>
-        /// <returns></returns>
+        /// <returns>selfContainedHtml</returns>
         public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
         {
             if (sourceOpenXml == null)
