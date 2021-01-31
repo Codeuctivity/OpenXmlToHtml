@@ -8,7 +8,10 @@ namespace Codeuctivity.OpenXmlToHtml
     /// </summary>
     public class WordprocessingTextSymbolToUnicodeHandler : IWordprocessingTextHandler
     {
-        public static readonly Dictionary<char, char> WingdingsToUnicode = new Dictionary<char, char>
+        /// <summary>
+        /// Dictonary used to translate symbol chars to unicode
+        /// </summary>
+        public static readonly Dictionary<char, char> SymbolToUnicode = new Dictionary<char, char>
         {
             { '','•' }
         };
@@ -20,7 +23,7 @@ namespace Codeuctivity.OpenXmlToHtml
         {
             if (fontFamily.TryGetValue("font-family", out var currentFontFamily) && currentFontFamily == "Symbol")
             {
-                foreach (var item in WingdingsToUnicode)
+                foreach (var item in SymbolToUnicode)
                 {
                     text = text.Replace(item.Key, item.Value);
                 }
