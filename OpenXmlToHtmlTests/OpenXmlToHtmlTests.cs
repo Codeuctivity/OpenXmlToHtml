@@ -12,7 +12,7 @@ namespace OpenXmlToHtmlTests
     {
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
-        [InlineData("WingdingsSymbols.docx",0)]
+        [InlineData("WingdingsSymbols.docx", 71000)]
         [InlineData("BasicTextFormated.docx", 0)]
         [InlineData("Images.docx", 0)]
         public async Task ShouldConvertDocumentIntegrativeTest(string testFileName, int allowedPixelErrorCount)
