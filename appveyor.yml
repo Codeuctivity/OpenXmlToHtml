@@ -27,7 +27,7 @@ dotnet_csproj:
 artifacts:
   - path: OpenXmlToHtmlCli/bin/Release/net5.0/win-x64/publish
     name: OpenXmlToHtmlCli
-  - path: '**\*.*nupkg'
+  - path: OpenXmlToHtml/bin/Release/OpenXmlToHtml*.*nupkg
     name: OpenXmlToHtmlNuget
 
 deploy:
