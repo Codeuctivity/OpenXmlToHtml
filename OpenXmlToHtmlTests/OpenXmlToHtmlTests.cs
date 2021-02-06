@@ -11,10 +11,11 @@ namespace OpenXmlToHtmlTests
     public class OpenXmlToHtmlTests
     {
         [Theory]
-        [InlineData("EmptyDocument.docx")]
-        [InlineData("BasicTextFormated.docx")]
-        [InlineData("Images.docx")]
-        public async Task ShouldConvertDocumentIntegrativeTest(string testFileName)
+        [InlineData("EmptyDocument.docx", 0)]
+        [InlineData("WingdingsSymbols.docx",0)]
+        [InlineData("BasicTextFormated.docx", 0)]
+        [InlineData("Images.docx", 0)]
+        public async Task ShouldConvertDocumentIntegrativeTest(string testFileName, int allowedPixelErrorCount)
         {
             var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
             var actualHtmlFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.html");
@@ -26,25 +27,9 @@ namespace OpenXmlToHtmlTests
             }
 
             await OpenXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
-            await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath);
+            await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath, allowedPixelErrorCount);
         }
 
-        [Theory(Skip = "There is to much noise on the test outcome")]
-        [InlineData("WingdingsSymbols.docx")]
-        public async Task ShouldConvertDocumentWithSymbolsIntegrativeTest(string testFileName)
-        {
-            var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
-            var actualHtmlFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.html");
-            var expectedHtmlFilePath = $"../../../ExpectedTestOutcome/{testFileName}.png";
-
-            if (File.Exists(actualHtmlFilePath))
-            {
-                File.Delete(actualHtmlFilePath);
-            }
-
-            await OpenXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
-            await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath);
-        }
 
         [Theory]
         [InlineData("1", "•1", "Symbol")]
