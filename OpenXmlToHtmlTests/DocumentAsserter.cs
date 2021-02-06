@@ -10,7 +10,7 @@ namespace OpenXmlToHtmlTests
 {
     internal static class DocumentAsserter
     {
-        internal static async Task AssertRenderedHtmlIsEqual(string actualFilePath, string expectReferenceFilePath)
+        internal static async Task AssertRenderedHtmlIsEqual(string actualFilePath, string expectReferenceFilePath, int allowedPixelErrorCount)
         {
             var actualFullPath = Path.GetFullPath(actualFilePath);
             var expectFullPath = Path.GetFullPath(expectReferenceFilePath);
@@ -22,10 +22,10 @@ namespace OpenXmlToHtmlTests
 
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceFilePath not found \n{expectFullPath}\n copy over \n{pathRasterizedHtml}\n if this is a new test case.");
 
-            AssertImageIsEqual(pathRasterizedHtml, expectReferenceFilePath);
+            AssertImageIsEqual(pathRasterizedHtml, expectReferenceFilePath, allowedPixelErrorCount);
         }
 
-        internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath)
+        internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath, int allowedPixelErrorCount)
         {
             var actualFullPath = Path.GetFullPath(actualImagePath);
             var expectFullPath = Path.GetFullPath(expectImageFilePath);
@@ -52,13 +52,15 @@ namespace OpenXmlToHtmlTests
 
             if (File.Exists(allowedDiffImage))
             {
-                var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
+                var resultWithAllowedDiff = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
 
-                Assert.True(result.PixelErrorCount < 51, $"Expected PixelErrorCount beyond 50 but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
+                Assert.True(resultWithAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
                 return;
             }
 
-            Assert.True(ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath), $"Expected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
+            var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
+
+            Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
         }
     }
 }

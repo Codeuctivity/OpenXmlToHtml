@@ -19,7 +19,7 @@ namespace Codeuctivity.OpenXmlToHtml
         /// </summary>
         /// <param name="sourceOpenXmlFilePath"></param>
         /// <param name="destinationHtmlFilePath"></param>
-        /// <returns></returns>
+        /// <returns>selfContainedHtmlFilePath</returns>
         public static async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath)
         {
             if (!File.Exists(sourceOpenXmlFilePath))
@@ -33,11 +33,12 @@ namespace Codeuctivity.OpenXmlToHtml
             await html.CopyToAsync(destinationHtmlFile).ConfigureAwait(false);
         }
 
+
         /// <summary>
         /// Converts docx to html
         /// </summary>
         /// <param name="sourceOpenXml"></param>
-        /// <returns></returns>
+        /// <returns>selfContainedHtml</returns>
         public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
         {
             return ConvertToHtmlAsync(sourceOpenXml, string.Empty);
@@ -48,7 +49,7 @@ namespace Codeuctivity.OpenXmlToHtml
         /// </summary>
         /// <param name="sourceOpenXml"></param>
         /// <param name="fallbackPageTitle"></param>
-        /// <returns></returns>
+        /// <returns>selfContainedHtml</returns>
         public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
         {
             if (sourceOpenXml == null)
@@ -72,7 +73,7 @@ namespace Codeuctivity.OpenXmlToHtml
 
             var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle));
 
-            var html = new XDocument(new XDocumentType("html", null, null, null), htmlElement);
+            var html = new XDocument(new XDocumentType("html", String.Empty, String.Empty, String.Empty), htmlElement);
 
             var memoryStreamHtml = new MemoryStream();
             html.Save(memoryStreamHtml);
@@ -82,8 +83,9 @@ namespace Codeuctivity.OpenXmlToHtml
 
         private static WmlToHtmlConverterSettings CreateHtmlConverterSettings(string pageTitle)
         {
-            var settings = new WmlToHtmlConverterSettings(new DefaultImageHandler(), new WordprocessingTextSymbolToUnicodeHandler())
+            var settings = new WmlToHtmlConverterSettings(new DefaultImageHandler(), new WordprocessingTextSymbolToUnicodeHandler(), new SymbolHandler())
             {
+                GeneralCss = string.Empty,
                 AdditionalCss = "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }",
                 PageTitle = pageTitle,
                 FabricateCssClasses = true,
