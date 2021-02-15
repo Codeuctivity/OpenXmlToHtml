@@ -1,9 +1,8 @@
 using Codeuctivity.OpenXmlToHtml;
-using OpenXmlPowerTools;
-using System.Collections.Generic;
+using Codeuctivity.PuppeteerSharp;
+using PdfSharp.Pdf.IO;
 using System.IO;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Xunit;
 
 namespace OpenXmlToHtmlTests
@@ -13,9 +12,9 @@ namespace OpenXmlToHtmlTests
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
         [InlineData("WingdingsSymbols.docx", 71000)]
-        [InlineData("BasicTextFormated.docx", 0)]
-        [InlineData("Images.docx", 0)]
-        public async Task ShouldConvertDocumentIntegrativeTest(string testFileName, int allowedPixelErrorCount)
+        [InlineData("BasicTextFormated.docx", 50)]
+        [InlineData("Images.docx", 5)]
+        public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount)
         {
             var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
             var actualHtmlFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.html");
@@ -30,35 +29,30 @@ namespace OpenXmlToHtmlTests
             await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath, allowedPixelErrorCount);
         }
 
-
-        [Theory]
-        [InlineData("1", "•1", "Symbol")]
-        [InlineData("1", "1", "arial")]
-        public void ShouldTranslateTextWithCustomGlyphToUnicode(string original, string expectedEquivalent, string fontFamily)
+        [Fact]
+        public async Task ShouldConvertDocumentIntegrativeWithToExpectedPageQuantityTest()
         {
-            var currentStyle = new Dictionary<string, string> { { "font-family", fontFamily } };
+            var testFileName = "TwoPages.docx";
+            var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
+            var actualHtmlFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.html");
 
-            var WordprocessingTextSymbolToUnicodeHandler = new WordprocessingTextSymbolToUnicodeHandler();
+            if (File.Exists(actualHtmlFilePath))
+            {
+                File.Delete(actualHtmlFilePath);
+            }
 
-            var actual = WordprocessingTextSymbolToUnicodeHandler.TransformText(original, currentStyle);
+            await OpenXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
 
-            Assert.Equal(expectedEquivalent, actual);
+            await using var chromiumRenderer = await Renderer.CreateAsync();
+            var pathPdfizedHtml = actualHtmlFilePath + ".pdf";
+            await chromiumRenderer.ConvertHtmlToPdf(actualHtmlFilePath, pathPdfizedHtml);
+            AssertPdfPageCount(pathPdfizedHtml, 2);
         }
 
-        [Fact]
-        public void ShouldTranslateSymbolsToUnicode()
+        private static void AssertPdfPageCount(string pathPdfizedHtml, int expectePageQuantity)
         {
-            var fontFamily = new Dictionary<string, string>
-            {
-                { "font-family", "Symbol" }
-            };
-
-            var symbolHandler = new SymbolHandler();
-            var element = new XElement("symbol", new XAttribute(W._char, "F0D7"));
-
-            var actual = symbolHandler.TransformSymbol(element, fontFamily);
-
-            Assert.Equal("<span xmlns=\"http://www.w3.org/1999/xhtml\">⋅</span>", actual.ToString());
+            var pdfReader = PdfReader.Open(pathPdfizedHtml, PdfDocumentOpenMode.ReadOnly);
+            Assert.Equal(expectePageQuantity, pdfReader.PageCount);
         }
     }
 }

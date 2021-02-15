@@ -6,15 +6,14 @@ using System.Xml.Linq;
 namespace Codeuctivity.OpenXmlToHtml
 {
     /// <summary>
-    /// Default handler that transforms every symbol into some html encoded font specific char
+    /// Handler that transforms every symbol into some HTML encoded font specific char
     /// </summary>
-    public class SymbolHandler : IWordprocessingSymbolHandler
+    public class SymbolHandler : ISymbolHandler
     {
+        private OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter.SymbolHandler DefaultSymbolHandler { get; set; }
 
-
-        private DefaultSymbolHandler DefaultSymbolHandler { get; set; }
         /// <summary>
-        /// Dictonary codes from symbol char to unicode 
+        /// Dictionary codes from symbol char to Unicode
         /// </summary>
         public static Dictionary<string, string> SymbolCharDictonary => new Dictionary<string, string>
     {
@@ -82,7 +81,7 @@ namespace Codeuctivity.OpenXmlToHtml
             {"F05D","]"},
             {"F05E","⊥"},
             {"F05F","_"},
-            // Not sure, but I think that overline has a context specific effect on the following char 
+            // Not sure, but I think that overline has a context specific effect on the following char
             {"F060","\u0305"},
             {"F061","α"},
             {"F062","β"},
@@ -244,8 +243,9 @@ namespace Codeuctivity.OpenXmlToHtml
             {"F0FE","⎭"},
             {"F0FF","□"}
     };
+
         /// <summary>
-        /// Dictonary codes from wingdings char to unicode 
+        /// Dictonary codes from wingdings char to unicode
         /// </summary>
         public static Dictionary<string, string> WingdingsCharDictonary => new Dictionary<string, string>
     {
@@ -474,13 +474,12 @@ namespace Codeuctivity.OpenXmlToHtml
             {"F0FE","🗹"},
     };
 
-
         /// <summary>
         /// Default ctor
         /// </summary>
         public SymbolHandler()
         {
-            DefaultSymbolHandler = new DefaultSymbolHandler();
+            DefaultSymbolHandler = new OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter.SymbolHandler();
         }
 
         /// <summary>

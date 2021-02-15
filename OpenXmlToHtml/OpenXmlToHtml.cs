@@ -33,7 +33,6 @@ namespace Codeuctivity.OpenXmlToHtml
             await html.CopyToAsync(destinationHtmlFile).ConfigureAwait(false);
         }
 
-
         /// <summary>
         /// Converts docx to html
         /// </summary>
@@ -73,7 +72,7 @@ namespace Codeuctivity.OpenXmlToHtml
 
             var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle));
 
-            var html = new XDocument(new XDocumentType("html", String.Empty, String.Empty, String.Empty), htmlElement);
+            var html = new XDocument(new XDocumentType("html", string.Empty, string.Empty, string.Empty), htmlElement);
 
             var memoryStreamHtml = new MemoryStream();
             html.Save(memoryStreamHtml);
@@ -83,16 +82,8 @@ namespace Codeuctivity.OpenXmlToHtml
 
         private static WmlToHtmlConverterSettings CreateHtmlConverterSettings(string pageTitle)
         {
-            var settings = new WmlToHtmlConverterSettings(new DefaultImageHandler(), new WordprocessingTextSymbolToUnicodeHandler(), new SymbolHandler())
-            {
-                GeneralCss = string.Empty,
-                AdditionalCss = "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }",
-                PageTitle = pageTitle,
-                FabricateCssClasses = true,
-                CssClassPrefix = "Codeuctivity-",
-                RestrictToSupportedLanguages = false,
-                RestrictToSupportedNumberingFormats = false
-            };
+            var settings = new WmlToHtmlConverterSettings(pageTitle, new ImageHandler(), new TextSymbolToUnicodeHandler(), new SymbolHandler(), new PageBreakHandler(new BreakHandler()), true, string.Empty, "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }", "Codeuctivity-");
+
             return settings;
         }
     }
