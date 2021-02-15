@@ -6,10 +6,10 @@ namespace Codeuctivity.OpenXmlToHtml
     /// <summary>
     /// Replaces any char of wingdings with the Unicode equivalent
     /// </summary>
-    public class WordprocessingTextSymbolToUnicodeHandler : IWordprocessingTextHandler
+    public class TextSymbolToUnicodeHandler : ITextHandler
     {
         /// <summary>
-        /// Dictonary used to translate symbol chars to unicode
+        /// Dictionary used to translate symbol chars to Unicode
         /// </summary>
         private static readonly Dictionary<char, char> SymbolToUnicode = new Dictionary<char, char>
         {
@@ -28,6 +28,7 @@ namespace Codeuctivity.OpenXmlToHtml
                     text = text.Replace(item.Key, item.Value);
                 }
             }
+
             return text;
         }
     }
