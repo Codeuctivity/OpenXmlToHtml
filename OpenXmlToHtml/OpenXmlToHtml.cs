@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Codeuctivity.OpenXmlToHtml
 {
@@ -68,14 +67,12 @@ namespace Codeuctivity.OpenXmlToHtml
             using var wordProcessingDocument = WordprocessingDocument.Open(sourceOpenXml, true);
             var coreFilePropertiesPart = wordProcessingDocument.CoreFilePropertiesPart;
             var computedPageTitle = coreFilePropertiesPart?.GetXDocument().Descendants(DC.title).FirstOrDefault();
-            var pageTitle = computedPageTitle == null ? fallbackPageTitle : computedPageTitle.ToString();
+            var pageTitle = string.IsNullOrEmpty(computedPageTitle?.Value) ? fallbackPageTitle : computedPageTitle!.Value;
 
             var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle));
 
-            var html = new XDocument(new XDocumentType("html", string.Empty, string.Empty, string.Empty), htmlElement);
-
             var memoryStreamHtml = new MemoryStream();
-            html.Save(memoryStreamHtml);
+            htmlElement.Save(memoryStreamHtml);
             memoryStreamHtml.Position = 0;
             return memoryStreamHtml;
         }
