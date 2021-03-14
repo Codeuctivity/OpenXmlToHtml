@@ -5,7 +5,7 @@
     <UserSecretsId>fd376f00-03ce-419b-883f-bfa8af935ee4</UserSecretsId>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>.\OpenXmlToHtmlOpenApi\OpenXmlToHtmlOpenApi.xml</DocumentationFile>
   </PropertyGroup>
 
