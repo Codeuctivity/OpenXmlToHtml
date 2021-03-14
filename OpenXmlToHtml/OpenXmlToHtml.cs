@@ -10,17 +10,17 @@ using System.Xml.Linq;
 namespace Codeuctivity.OpenXmlToHtml
 {
     /// <summary>
-    ///  Converts docx to html
+    ///  Converts DOCX to HTML
     /// </summary>
-    public static class OpenXmlToHtml
+    public class OpenXmlToHtml : IOpenXmlToHtml
     {
         /// <summary>
-        /// Converts docx to html
+        /// Converts DOCX to HTML
         /// </summary>
         /// <param name="sourceOpenXmlFilePath"></param>
         /// <param name="destinationHtmlFilePath"></param>
         /// <returns>selfContainedHtmlFilePath</returns>
-        public static async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath)
+        public async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath)
         {
             if (!File.Exists(sourceOpenXmlFilePath))
             {
@@ -34,22 +34,22 @@ namespace Codeuctivity.OpenXmlToHtml
         }
 
         /// <summary>
-        /// Converts docx to html
+        /// Converts DOCX to HTML
         /// </summary>
         /// <param name="sourceOpenXml"></param>
         /// <returns>selfContainedHtml</returns>
-        public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
+        public Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
         {
             return ConvertToHtmlAsync(sourceOpenXml, string.Empty);
         }
 
         /// <summary>
-        /// Converts docx to html
+        /// Converts DOCX to HTML
         /// </summary>
         /// <param name="sourceOpenXml"></param>
         /// <param name="fallbackPageTitle"></param>
         /// <returns>selfContainedHtml</returns>
-        public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
+        public Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
         {
             if (sourceOpenXml == null)
             {
@@ -59,7 +59,7 @@ namespace Codeuctivity.OpenXmlToHtml
             return ConvertToHtmlInternalAsync(sourceOpenXml, fallbackPageTitle);
         }
 
-        private static async Task<Stream> ConvertToHtmlInternalAsync(Stream sourceOpenXml, string fallbackPageTitle)
+        private async Task<Stream> ConvertToHtmlInternalAsync(Stream sourceOpenXml, string fallbackPageTitle)
         {
             using var memoryStream = new MemoryStream();
             await sourceOpenXml.CopyToAsync(memoryStream).ConfigureAwait(false);
@@ -80,7 +80,7 @@ namespace Codeuctivity.OpenXmlToHtml
             return memoryStreamHtml;
         }
 
-        private static WmlToHtmlConverterSettings CreateHtmlConverterSettings(string pageTitle)
+        private WmlToHtmlConverterSettings CreateHtmlConverterSettings(string pageTitle)
         {
             var settings = new WmlToHtmlConverterSettings(pageTitle, new ImageHandler(), new TextSymbolToUnicodeHandler(), new SymbolHandler(), new PageBreakHandler(new BreakHandler()), true, string.Empty, "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }", "Codeuctivity-");
 

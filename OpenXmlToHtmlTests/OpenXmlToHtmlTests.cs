@@ -9,6 +9,13 @@ namespace OpenXmlToHtmlTests
 {
     public class OpenXmlToHtmlTests
     {
+        private readonly OpenXmlToHtml openXmlToHtml;
+
+        public OpenXmlToHtmlTests()
+        {
+            openXmlToHtml = new OpenXmlToHtml();
+        }
+
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
         [InlineData("WingdingsSymbols.docx", 71000)]
@@ -25,7 +32,7 @@ namespace OpenXmlToHtmlTests
                 File.Delete(actualHtmlFilePath);
             }
 
-            await OpenXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
+            await openXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
             await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath, allowedPixelErrorCount);
         }
 
@@ -41,7 +48,7 @@ namespace OpenXmlToHtmlTests
                 File.Delete(actualHtmlFilePath);
             }
 
-            await OpenXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
+            await openXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
 
             await using var chromiumRenderer = await Renderer.CreateAsync();
             var pathPdfizedHtml = actualHtmlFilePath + ".pdf";
