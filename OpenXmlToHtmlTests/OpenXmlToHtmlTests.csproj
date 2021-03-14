@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ImageSharpCompare" Version="1.1.34" />
+    <PackageReference Include="ImageSharpCompare" Version="1.1.33" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
     <PackageReference Include="PuppeteerSharp.Renderer" Version="1.0.12" />
