@@ -68,6 +68,10 @@ namespace OpenXmlToHtmlTests
             {
                 Assert.True(false, $"Actual Dimension differs from expected \nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \nReplace {expectFullPath} with the new value.");
             }
+            catch (Exception exception)
+            {
+                throw new Exception("Failed to parse actual image \n {base64fyedActualImage}", exception);
+            }
         }
     }
 }

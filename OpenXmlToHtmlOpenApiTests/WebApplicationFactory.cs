@@ -8,7 +8,7 @@ namespace OpenXmlToHtmlOpenApiTests
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            // see https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1 for things you could place here
+            // see https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests for things you could place here
 
             builder?.ConfigureServices(services =>
             {
