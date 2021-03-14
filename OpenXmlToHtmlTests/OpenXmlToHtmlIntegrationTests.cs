@@ -5,18 +5,28 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Xunit;
 
 namespace OpenXmlToHtmlTests
 {
-    public class OpenXmlToHtmlTests
+    public class OpenXmlToHtmlIntegrationTests
     {
+        private const string xhtmlPrimer = "<html xmlns=\"http://www.w3.org/1999/xhtml\"";
+        private readonly OpenXmlToHtml openXmlToHtml;
+
+        public OpenXmlToHtmlIntegrationTests()
+        {
+            openXmlToHtml = new OpenXmlToHtml();
+        }
+
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
         [InlineData("WingdingsSymbols.docx", 71000)]
-        [InlineData("BasicTextFormated.docx", 50)]
-        [InlineData("Images.docx", 5)]
+        [InlineData("BasicTextFormated.docx", 250)]
+        [InlineData("Images.docx", 250)]
         public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount)
         {
             var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
@@ -28,7 +38,9 @@ namespace OpenXmlToHtmlTests
                 File.Delete(actualHtmlFilePath);
             }
 
-            await OpenXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
+            await openXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
+
+            AssertXhtmlIsValid(actualHtmlFilePath);
             await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath, allowedPixelErrorCount);
         }
 
@@ -73,8 +85,9 @@ namespace OpenXmlToHtmlTests
                 File.Delete(actualHtmlFilePath);
             }
 
-            await OpenXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
+            await openXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
 
+            AssertXhtmlIsValid(actualHtmlFilePath);
             await using var chromiumRenderer = await Renderer.CreateAsync();
             var pathPdfizedHtml = actualHtmlFilePath + ".pdf";
             await chromiumRenderer.ConvertHtmlToPdf(actualHtmlFilePath, pathPdfizedHtml);
@@ -85,6 +98,24 @@ namespace OpenXmlToHtmlTests
         {
             var pdfReader = PdfReader.Open(pathPdfizedHtml, PdfDocumentOpenMode.ReadOnly);
             Assert.Equal(expectePageQuantity, pdfReader.PageCount);
+        }
+
+        private void AssertXhtmlIsValid(string actualHtmlFilePath)
+        {
+            var messages = new StringBuilder();
+            var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema, DtdProcessing = DtdProcessing.Ignore };
+            settings.ValidationEventHandler += (sender, args) => messages.AppendLine(args.Message);
+            var reader = XmlReader.Create(actualHtmlFilePath, settings);
+#pragma warning disable S108 // Nested blocks of code should not be left empty
+            while (reader.Read()) { }
+#pragma warning restore S108 // Nested blocks of code should not be left empty
+
+            if (!File.ReadAllText(actualHtmlFilePath).Contains(xhtmlPrimer))
+            {
+                messages.AppendLine("Xhtml root element missing");
+            }
+
+            Assert.True(messages.Length == 0, messages.ToString());
         }
     }
 }

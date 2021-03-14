@@ -6,21 +6,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Codeuctivity.OpenXmlToHtml
 {
     /// <summary>
-    ///  Converts docx to html
+    ///  Converts DOCX to HTML
     /// </summary>
-    public static class OpenXmlToHtml
+    public class OpenXmlToHtml : IOpenXmlToHtml
     {
         /// <summary>
-        /// Converts docx to html
+        /// Converts DOCX to HTML
         /// </summary>
         /// <param name="sourceOpenXmlFilePath"></param>
         /// <param name="destinationHtmlFilePath"></param>
         /// <returns>selfContainedHtmlFilePath</returns>
-        public static async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath)
+        public async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath)
         {
             if (!File.Exists(sourceOpenXmlFilePath))
             {
@@ -34,22 +35,22 @@ namespace Codeuctivity.OpenXmlToHtml
         }
 
         /// <summary>
-        /// Converts docx to html
+        /// Converts DOCX to HTML
         /// </summary>
         /// <param name="sourceOpenXml"></param>
         /// <returns>selfContainedHtml</returns>
-        public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
+        public Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
         {
             return ConvertToHtmlAsync(sourceOpenXml, string.Empty);
         }
 
         /// <summary>
-        /// Converts docx to html
+        /// Converts DOCX to HTML
         /// </summary>
         /// <param name="sourceOpenXml"></param>
         /// <param name="fallbackPageTitle"></param>
         /// <returns>selfContainedHtml</returns>
-        public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
+        public Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
         {
             if (sourceOpenXml == null)
             {
@@ -88,9 +89,9 @@ namespace Codeuctivity.OpenXmlToHtml
             var pageTitle = string.IsNullOrEmpty(computedPageTitle?.Value) ? fallbackPageTitle : computedPageTitle!.Value;
 
             var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle, imageHandler));
-
+            var html = new XDocument(new XDocumentType("html", "-//W3C//DTD XHTML 1.1//EN", "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd", null), htmlElement);
             var memoryStreamHtml = new MemoryStream();
-            htmlElement.Save(memoryStreamHtml);
+            html.Save(memoryStreamHtml, SaveOptions.DisableFormatting);
             memoryStreamHtml.Position = 0;
             return memoryStreamHtml;
         }

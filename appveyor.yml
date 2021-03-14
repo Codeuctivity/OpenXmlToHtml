@@ -13,7 +13,8 @@ build:
   use_snupkg_format: true
   verbosity: minimal
 after_build:
-  - ps: dotnet publish .\OpenXmlToHtmlCli -p:PublishProfile=OpenXmlToHtmlCliWindows
+  - ps: dotnet publish ./OpenXmlToHtmlCli -p:PublishProfile=OpenXmlToHtmlCliWindows
+  - ps: dotnet publish ./OpenXmlToHtmlOpenApi -p:PublishProfile=OpenXmlToHtmlOpenApi
 
 dotnet_csproj:
   patch: true
@@ -27,6 +28,8 @@ dotnet_csproj:
 artifacts:
   - path: OpenXmlToHtmlCli/bin/Release/net5.0/win-x64/publish
     name: OpenXmlToHtmlCli
+  - path: OpenXmlToHtmlOpenApi/bin/Release/netcoreapp3.1/publish
+    name: OpenXmlToHtmlOpenApi
 
 deploy:
   - provider: NuGet
