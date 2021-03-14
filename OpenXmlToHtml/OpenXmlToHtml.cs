@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Codeuctivity.OpenXmlToHtml
 {
@@ -88,9 +89,9 @@ namespace Codeuctivity.OpenXmlToHtml
             var pageTitle = string.IsNullOrEmpty(computedPageTitle?.Value) ? fallbackPageTitle : computedPageTitle!.Value;
 
             var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle, imageHandler));
-
+            var html = new XDocument(new XDocumentType("html", "-//W3C//DTD XHTML 1.1//EN", "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd", null), htmlElement);
             var memoryStreamHtml = new MemoryStream();
-            htmlElement.Save(memoryStreamHtml);
+            html.Save(memoryStreamHtml, SaveOptions.DisableFormatting);
             memoryStreamHtml.Position = 0;
             return memoryStreamHtml;
         }

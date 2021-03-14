@@ -26,7 +26,7 @@ namespace Codeuctivity.OpenXmlToHtml
 
             var cidReference = $"cid: {cid}";
 
-            return new XElement(Xhtml.img, new XAttribute(NoNamespace.src, cidReference), imageInfo.ImgStyleAttribute, imageInfo.AltText != null ? new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
+            return new XElement(Xhtml.img, new XAttribute(NoNamespace.src, cidReference), imageInfo.ImgStyleAttribute, imageInfo?.AltText != null ? new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
         }
     }
 }

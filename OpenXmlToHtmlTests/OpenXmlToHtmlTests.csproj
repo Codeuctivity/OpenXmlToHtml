@@ -34,8 +34,4 @@
     <EditorConfigFiles Update="C:\Users\Stefan\source\repos\OpenXmlToHtml\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TestInput\" />
-  </ItemGroup>
-
 </Project>
