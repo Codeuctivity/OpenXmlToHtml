@@ -66,7 +66,7 @@ namespace OpenXmlToHtmlTests
             }
             catch (ImageSharpCompareException)
             {
-                Assert.True(false, $"Actual Dimension differs from expected \nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \nReplace {actualFullPath} with the new value.");
+                Assert.True(false, $"Actual Dimension differs from expected \nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \nReplace {expectFullPath} with the new value.");
             }
         }
     }
