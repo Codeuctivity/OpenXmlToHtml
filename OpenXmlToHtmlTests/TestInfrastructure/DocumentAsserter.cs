@@ -70,7 +70,7 @@ namespace OpenXmlToHtmlTests
             }
             catch (Exception exception)
             {
-                throw new Exception("Failed to parse actual image \n {base64fyedActualImage}", exception);
+                throw new Exception($"Failed to parse actual image \n {base64fyedActualImage}", exception);
             }
         }
     }
