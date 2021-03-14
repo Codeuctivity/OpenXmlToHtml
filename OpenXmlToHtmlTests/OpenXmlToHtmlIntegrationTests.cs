@@ -12,12 +12,12 @@ using Xunit;
 
 namespace OpenXmlToHtmlTests
 {
-    public class OpenXmlToHtmlTests
+    public class OpenXmlToHtmlIntegrationTests
     {
         private const string xhtmlPrimer = "<html xmlns=\"http://www.w3.org/1999/xhtml\"";
         private readonly OpenXmlToHtml openXmlToHtml;
 
-        public OpenXmlToHtmlTests()
+        public OpenXmlToHtmlIntegrationTests()
         {
             openXmlToHtml = new OpenXmlToHtml();
         }
@@ -25,8 +25,8 @@ namespace OpenXmlToHtmlTests
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
         [InlineData("WingdingsSymbols.docx", 71000)]
-        [InlineData("BasicTextFormated.docx", 50)]
-        [InlineData("Images.docx", 5)]
+        [InlineData("BasicTextFormated.docx", 250)]
+        [InlineData("Images.docx", 250)]
         public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount)
         {
             var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
