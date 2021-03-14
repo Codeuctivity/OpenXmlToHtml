@@ -2,10 +2,10 @@
 using OpenXmlPowerTools;
 using OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Codeuctivity.OpenXmlToHtml
 {
@@ -56,10 +56,27 @@ namespace Codeuctivity.OpenXmlToHtml
                 throw new ArgumentNullException(nameof(sourceOpenXml));
             }
 
-            return ConvertToHtmlInternalAsync(sourceOpenXml, fallbackPageTitle);
+            return ConvertToHtmlInternalAsync(sourceOpenXml, fallbackPageTitle, new ImageHandler());
         }
 
-        private async Task<Stream> ConvertToHtmlInternalAsync(Stream sourceOpenXml, string fallbackPageTitle)
+        /// <summary>
+        /// Converts docx to html
+        /// </summary>
+        /// <param name="sourceOpenXml"></param>
+        /// <param name="fallbackPageTitle"></param>
+        /// <param name="images"></param>
+        /// <returns>selfContainedHtml</returns>
+        public static Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle, IDictionary<string, byte[]> images)
+        {
+            if (sourceOpenXml == null)
+            {
+                throw new ArgumentNullException(nameof(sourceOpenXml));
+            }
+
+            return ConvertToHtmlInternalAsync(sourceOpenXml, fallbackPageTitle, new ExportImageHandler(images));
+        }
+
+        private static async Task<Stream> ConvertToHtmlInternalAsync(Stream sourceOpenXml, string fallbackPageTitle, IImageHandler imageHandler)
         {
             using var memoryStream = new MemoryStream();
             await sourceOpenXml.CopyToAsync(memoryStream).ConfigureAwait(false);
@@ -68,21 +85,19 @@ namespace Codeuctivity.OpenXmlToHtml
             using var wordProcessingDocument = WordprocessingDocument.Open(sourceOpenXml, true);
             var coreFilePropertiesPart = wordProcessingDocument.CoreFilePropertiesPart;
             var computedPageTitle = coreFilePropertiesPart?.GetXDocument().Descendants(DC.title).FirstOrDefault();
-            var pageTitle = computedPageTitle == null ? fallbackPageTitle : computedPageTitle.ToString();
+            var pageTitle = string.IsNullOrEmpty(computedPageTitle?.Value) ? fallbackPageTitle : computedPageTitle!.Value;
 
-            var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle));
-
-            var html = new XDocument(new XDocumentType("html", string.Empty, string.Empty, string.Empty), htmlElement);
+            var htmlElement = WmlToHtmlConverter.ConvertToHtml(wordProcessingDocument, CreateHtmlConverterSettings(pageTitle, imageHandler));
 
             var memoryStreamHtml = new MemoryStream();
-            html.Save(memoryStreamHtml);
+            htmlElement.Save(memoryStreamHtml);
             memoryStreamHtml.Position = 0;
             return memoryStreamHtml;
         }
 
-        private WmlToHtmlConverterSettings CreateHtmlConverterSettings(string pageTitle)
+        private static WmlToHtmlConverterSettings CreateHtmlConverterSettings(string pageTitle, IImageHandler imageHandler)
         {
-            var settings = new WmlToHtmlConverterSettings(pageTitle, new ImageHandler(), new TextSymbolToUnicodeHandler(), new SymbolHandler(), new PageBreakHandler(new BreakHandler()), true, string.Empty, "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }", "Codeuctivity-");
+            var settings = new WmlToHtmlConverterSettings(pageTitle, imageHandler, new TextSymbolToUnicodeHandler(), new SymbolHandler(), new PageBreakHandler(new BreakHandler()), true, string.Empty, "@page { size: A4 } body { margin: 1cm auto; max-width: 20cm; padding: 0; }", "Codeuctivity-");
 
             return settings;
         }

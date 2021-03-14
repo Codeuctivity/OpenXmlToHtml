@@ -1,7 +1,10 @@
 using Codeuctivity.OpenXmlToHtml;
 using Codeuctivity.PuppeteerSharp;
 using PdfSharp.Pdf.IO;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -34,6 +37,35 @@ namespace OpenXmlToHtmlTests
 
             await openXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
             await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath, allowedPixelErrorCount);
+        }
+
+        [Theory]
+        [InlineData("Images.docx")]
+        public async Task ShouldConvertDocumentAndExportImagesIntegrativeTest(string testFileName)
+        {
+            var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
+            var actualHtmlFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.html");
+
+            if (File.Exists(actualHtmlFilePath))
+            {
+                File.Delete(actualHtmlFilePath);
+            }
+
+            using var sourceIpenXml = new FileStream(sourceOpenXmlFilePath, FileMode.Open, FileAccess.Read);
+            var exportedImages = new Dictionary<string, byte[]>();
+
+            await OpenXmlToHtml.ConvertToHtmlAsync(sourceIpenXml, "fallbackTitle", exportedImages);
+
+            Assert.Equal(2, exportedImages.Count);
+
+            Assert.True(IsValidBitmap(exportedImages.First().Value));
+            Assert.True(IsValidBitmap(exportedImages.Last().Value));
+        }
+
+        private bool IsValidBitmap(byte[] blob)
+        {
+            var bitmap = new Bitmap(new MemoryStream(blob));
+            return bitmap.Width > 1 && bitmap.Height > 1;
         }
 
         [Fact]
