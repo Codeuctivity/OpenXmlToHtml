@@ -35,7 +35,7 @@ steps:
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'Visual Studio Professional (bb399beb-cc42-43a5-b3ee-8559b016d9f6)'
+    azureSubscription: 'Visual Studio Professional Subscription(62ff8eb4-a032-4113-8da8-a8627b6c1e32)'
     appType: 'webAppLinux'
     WebAppName: 'OpenXmlConverter'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
