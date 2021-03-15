@@ -28,7 +28,7 @@ dotnet_csproj:
 artifacts:
   - path: OpenXmlToHtmlCli/bin/Release/net5.0/win-x64/publish
     name: OpenXmlToHtmlCli
-  - path: OpenXmlToHtmlOpenApi/bin/Release/netcoreapp3.1/publish
+  - path: OpenXmlToHtmlOpenApi/bin/Release/net5/publish
     name: OpenXmlToHtmlOpenApi
 
 deploy:
