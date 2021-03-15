@@ -31,7 +31,7 @@ namespace OpenXmlToHtmlCli
             }
 
             Console.WriteLine($"Converting {inputPathDocx} to {outputPathHtml}");
-            await OpenXmlToHtml.ConvertToHtmlAsync(inputPathDocx, outputPathHtml);
+            await new OpenXmlToHtml().ConvertToHtmlAsync(inputPathDocx, outputPathHtml);
             return 0;
         }
     }
