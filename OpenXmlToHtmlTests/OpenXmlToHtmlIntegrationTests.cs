@@ -49,12 +49,6 @@ namespace OpenXmlToHtmlTests
         public async Task ShouldConvertDocumentAndExportImagesIntegrativeTest(string testFileName)
         {
             var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
-            var actualHtmlFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.html");
-
-            if (File.Exists(actualHtmlFilePath))
-            {
-                File.Delete(actualHtmlFilePath);
-            }
 
             using var sourceIpenXml = new FileStream(sourceOpenXmlFilePath, FileMode.Open, FileAccess.Read);
             var exportedImages = new Dictionary<string, byte[]>();
