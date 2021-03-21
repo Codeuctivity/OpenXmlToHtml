@@ -24,7 +24,9 @@ namespace OpenXmlToHtmlTests
 
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
-        //[InlineData("WingdingsSymbols.docx", 71000)]
+        [InlineData("Wingdings.docx", 71000)]
+        [InlineData("Symbols.docx", 71000)]
+        [InlineData("SymbolRibbon.docx", 71000)]
         [InlineData("BasicTextFormated.docx", 250)]
         [InlineData("Images.docx", 250)]
         public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount)
@@ -53,12 +55,14 @@ namespace OpenXmlToHtmlTests
             using var sourceIpenXml = new FileStream(sourceOpenXmlFilePath, FileMode.Open, FileAccess.Read);
             var exportedImages = new Dictionary<string, byte[]>();
 
-            await OpenXmlToHtml.ConvertToHtmlAsync(sourceIpenXml, "fallbackTitle", exportedImages);
+            var actuelHtml = await OpenXmlToHtml.ConvertToHtmlAsync(sourceIpenXml, "fallbackTitle", exportedImages);
 
             Assert.Equal(2, exportedImages.Count);
 
             Assert.True(IsValidBitmap(exportedImages.First().Value));
             Assert.True(IsValidBitmap(exportedImages.Last().Value));
+
+            AssertXhtmlIsValid(actuelHtml);
         }
 
         private bool IsValidBitmap(byte[] blob)
@@ -108,6 +112,19 @@ namespace OpenXmlToHtmlTests
             {
                 messages.AppendLine("Xhtml root element missing");
             }
+
+            Assert.True(messages.Length == 0, messages.ToString());
+        }
+
+        private void AssertXhtmlIsValid(Stream actualHtml)
+        {
+            var messages = new StringBuilder();
+            var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema, DtdProcessing = DtdProcessing.Ignore };
+            settings.ValidationEventHandler += (sender, args) => messages.AppendLine(args.Message);
+            var reader = XmlReader.Create(actualHtml, settings);
+#pragma warning disable S108 // Nested blocks of code should not be left empty
+            while (reader.Read()) { }
+#pragma warning restore S108 // Nested blocks of code should not be left empty
 
             Assert.True(messages.Length == 0, messages.ToString());
         }

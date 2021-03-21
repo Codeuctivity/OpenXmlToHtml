@@ -42,6 +42,6 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: vDre9Q+oDuJgifWTngorMKiWwJox+L6TzglqQuTjFz9wZuzbjGPg4soPAsR19MLm
-    artifact: OpenXmlToHtmlCli,OpenXmlToHtmlNuget
+    artifact: OpenXmlToHtmlCli,OpenXmlToHtmlOpenApi
     on:
       branch: main

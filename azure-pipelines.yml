@@ -39,4 +39,3 @@ steps:
     appType: 'webAppLinux'
     WebAppName: 'OpenXmlConverter'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    RuntimeStack: 'DOTNETCORE|3.1'
