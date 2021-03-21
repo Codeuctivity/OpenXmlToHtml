@@ -24,7 +24,7 @@ namespace OpenXmlToHtmlTests
 
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
-        [InlineData("Wingdings.docx", 71000)]
+        //[InlineData("Wingdings.docx", 71000)]
         [InlineData("Symbols.docx", 71000)]
         [InlineData("SymbolRibbon.docx", 71000)]
         [InlineData("BasicTextFormated.docx", 250)]
