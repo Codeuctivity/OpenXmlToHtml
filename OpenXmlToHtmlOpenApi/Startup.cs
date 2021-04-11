@@ -38,7 +38,10 @@ namespace OpenXmlToHtmlOpenApi
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+
+            await using var chromiumRenderer = await Renderer.CreateAsync();
             services.AddSingleton<IOpenXmlToHtml, OpenXmlToHtml>();
+            services.AddSingleton<IRenderer, Renderer>();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>

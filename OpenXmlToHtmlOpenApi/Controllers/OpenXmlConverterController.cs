@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Codeuctivity.PuppeteerSharp;
 
 namespace OpenXmlToHtmlOpenApi.Controllers
 {
@@ -37,6 +38,27 @@ namespace OpenXmlToHtmlOpenApi.Controllers
             {
                 var htmlStream = await _openXmlToHtml.ConvertToHtmlAsync(openXmlFile.OpenReadStream());
                 return File(htmlStream, "text/html");
+            }
+            return BadRequest("Request contains no document");
+        }
+
+        /// <summary>
+        /// Converts OpenXmlFile to PDF
+        /// </summary>
+        /// <param name="openXmlFile"></param>
+        /// <returns>PDF</returns>
+        [HttpPost]
+        [Route("ConvertToPdf")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile)
+        {
+            if (openXmlFile.Length > 0)
+            {
+                var htmlStream = await _openXmlToHtml.ConvertToHtmlAsync(openXmlFile.OpenReadStream());
+                await chromiumRenderer.ConvertHtmlToPdf(actualHtmlFilePath, pathPdfizedHtml);
+
+                return File(htmlStream, "application/pdf");
             }
             return BadRequest("Request contains no document");
         }
