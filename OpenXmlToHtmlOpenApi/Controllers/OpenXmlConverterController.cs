@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Codeuctivity.PuppeteerSharp;
+using System.IO;
+using System;
 
 namespace OpenXmlToHtmlOpenApi.Controllers
 {
@@ -14,14 +16,16 @@ namespace OpenXmlToHtmlOpenApi.Controllers
     public class OpenXmlConverterController : ControllerBase
     {
         private readonly IOpenXmlToHtml _openXmlToHtml;
+        private Renderer _renderer;
 
         /// <summary>
         /// OpenXmlConverter ctor
         /// </summary>
         /// <param name="openXmlToHtml"></param>
-        public OpenXmlConverterController(IOpenXmlToHtml openXmlToHtml)
+        public OpenXmlConverterController(IOpenXmlToHtml openXmlToHtml, Renderer renderer)
         {
             _openXmlToHtml = openXmlToHtml;
+            _renderer = renderer;
         }
 
         /// <summary>
@@ -53,12 +57,28 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile)
         {
+            if (_renderer.BrowserFetcher == null)
+                _renderer = await Renderer.CreateAsync();
+
             if (openXmlFile.Length > 0)
             {
-                var htmlStream = await _openXmlToHtml.ConvertToHtmlAsync(openXmlFile.OpenReadStream());
-                await chromiumRenderer.ConvertHtmlToPdf(actualHtmlFilePath, pathPdfizedHtml);
+                var pathHtml = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.html");
+                var pathPdf = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.pdf");
 
-                return File(htmlStream, "application/pdf");
+                var htmlStream = await _openXmlToHtml.ConvertToHtmlAsync(openXmlFile.OpenReadStream());
+                try
+                {
+                    using var fileStreamHtml = new FileStream(pathHtml, FileMode.CreateNew);
+                    await htmlStream.CopyToAsync(fileStreamHtml);
+                    await _renderer.ConvertHtmlToPdf(pathHtml, pathPdf);
+                    var pdf = await System.IO.File.ReadAllBytesAsync(pathPdf);
+                    return File(pdf, "application/pdf");
+                }
+                finally
+                {
+                    System.IO.File.Delete(pathHtml);
+                    System.IO.File.Delete(pathPdf);
+                }
             }
             return BadRequest("Request contains no document");
         }

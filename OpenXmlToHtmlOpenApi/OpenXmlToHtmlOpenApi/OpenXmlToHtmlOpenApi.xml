@@ -9,7 +9,7 @@
             OpenXml converter
             </summary>
         </member>
-        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.#ctor(Codeuctivity.OpenXmlToHtml.IOpenXmlToHtml)">
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.#ctor(Codeuctivity.OpenXmlToHtml.IOpenXmlToHtml,Codeuctivity.PuppeteerSharp.Renderer)">
             <summary>
             OpenXmlConverter ctor
             </summary>

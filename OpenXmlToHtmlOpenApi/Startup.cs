@@ -1,4 +1,5 @@
 using Codeuctivity.OpenXmlToHtml;
+using Codeuctivity.PuppeteerSharp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -39,9 +40,8 @@ namespace OpenXmlToHtmlOpenApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            await using var chromiumRenderer = await Renderer.CreateAsync();
             services.AddSingleton<IOpenXmlToHtml, OpenXmlToHtml>();
-            services.AddSingleton<IRenderer, Renderer>();
+            services.AddSingleton<Renderer, Renderer>();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
