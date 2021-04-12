@@ -25,8 +25,8 @@ namespace OpenXmlToHtmlTests
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
         //[InlineData("WingdingsSymbols.docx", 71000)]
-        [InlineData("BasicTextFormated.docx", 250)]
-        [InlineData("Images.docx", 250)]
+        [InlineData("BasicTextFormated.docx", 2000)]
+        [InlineData("Images.docx", 400)]
         public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount)
         {
             var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
