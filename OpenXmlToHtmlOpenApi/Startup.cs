@@ -1,4 +1,5 @@
 using Codeuctivity.OpenXmlToHtml;
+using Codeuctivity.PuppeteerSharp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -38,7 +39,9 @@ namespace OpenXmlToHtmlOpenApi
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddSingleton<IOpenXmlToHtml, OpenXmlToHtml>();
+            services.AddSingleton<Renderer, Renderer>();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>

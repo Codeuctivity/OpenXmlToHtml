@@ -9,7 +9,7 @@
             OpenXml converter
             </summary>
         </member>
-        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.#ctor(Codeuctivity.OpenXmlToHtml.IOpenXmlToHtml)">
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.#ctor(Codeuctivity.OpenXmlToHtml.IOpenXmlToHtml,Codeuctivity.PuppeteerSharp.Renderer)">
             <summary>
             OpenXmlConverter ctor
             </summary>
@@ -21,6 +21,13 @@
             </summary>
             <param name="openXmlFile"></param>
             <returns>HTML</returns>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToPdf(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Converts OpenXmlFile to PDF
+            </summary>
+            <param name="openXmlFile"></param>
+            <returns>PDF</returns>
         </member>
         <member name="T:OpenXmlToHtmlOpenApi.Program">
             <summary>
