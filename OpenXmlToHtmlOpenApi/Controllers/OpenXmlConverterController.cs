@@ -16,17 +16,14 @@ namespace OpenXmlToHtmlOpenApi.Controllers
     public class OpenXmlConverterController : ControllerBase
     {
         private readonly IOpenXmlToHtml _openXmlToHtml;
-        private Renderer _renderer;
 
         /// <summary>
         /// OpenXmlConverter ctor
         /// </summary>
         /// <param name="openXmlToHtml"></param>
-        /// <param name="renderer"></param>
-        public OpenXmlConverterController(IOpenXmlToHtml openXmlToHtml, Renderer renderer)
+        public OpenXmlConverterController(IOpenXmlToHtml openXmlToHtml)
         {
             _openXmlToHtml = openXmlToHtml;
-            _renderer = renderer;
         }
 
         /// <summary>
@@ -58,10 +55,7 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile)
         {
-            if (_renderer.BrowserFetcher == null)
-            {
-                _renderer = await Renderer.CreateAsync();
-            }
+            await using var _renderer = await Renderer.CreateAsync();
 
             if (openXmlFile.Length > 0)
             {

@@ -9,12 +9,11 @@
             OpenXml converter
             </summary>
         </member>
-        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.#ctor(Codeuctivity.OpenXmlToHtml.IOpenXmlToHtml,Codeuctivity.PuppeteerSharp.Renderer)">
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.#ctor(Codeuctivity.OpenXmlToHtml.IOpenXmlToHtml)">
             <summary>
             OpenXmlConverter ctor
             </summary>
             <param name="openXmlToHtml"></param>
-            <param name="renderer"></param>
         </member>
         <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToHtml(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
