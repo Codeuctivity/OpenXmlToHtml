@@ -55,8 +55,7 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile)
         {
-            await using var _renderer = await Renderer.CreateAsync();
-
+            await using var chromiumRenderer = await Renderer.CreateAsync();
             if (openXmlFile.Length > 0)
             {
                 var pathHtml = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.html");
@@ -67,9 +66,9 @@ namespace OpenXmlToHtmlOpenApi.Controllers
                 {
                     using var fileStreamHtml = new FileStream(pathHtml, FileMode.CreateNew);
                     await htmlStream.CopyToAsync(fileStreamHtml);
-                    await _renderer.ConvertHtmlToPdf(pathHtml, pathPdf);
+                    await chromiumRenderer.ConvertHtmlToPdf(pathHtml, pathPdf);
                     var pdf = await System.IO.File.ReadAllBytesAsync(pathPdf);
-                    return File(pdf, "application/pdf");
+                    return File(pdf, "application/pdf", $"{openXmlFile.FileName}.pdf");
                 }
                 finally
                 {
