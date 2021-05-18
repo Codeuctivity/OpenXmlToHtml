@@ -1,10 +1,10 @@
 ﻿using Codeuctivity.OpenXmlToHtml;
+using Codeuctivity.PuppeteerSharp;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Codeuctivity.PuppeteerSharp;
-using System.IO;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace OpenXmlToHtmlOpenApi.Controllers
 {
@@ -22,6 +22,7 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         /// OpenXmlConverter ctor
         /// </summary>
         /// <param name="openXmlToHtml"></param>
+        /// <param name="renderer"></param>
         public OpenXmlConverterController(IOpenXmlToHtml openXmlToHtml, Renderer renderer)
         {
             _openXmlToHtml = openXmlToHtml;
@@ -58,7 +59,9 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile)
         {
             if (_renderer.BrowserFetcher == null)
+            {
                 _renderer = await Renderer.CreateAsync();
+            }
 
             if (openXmlFile.Length > 0)
             {

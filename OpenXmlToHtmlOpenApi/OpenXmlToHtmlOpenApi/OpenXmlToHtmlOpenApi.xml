@@ -14,6 +14,7 @@
             OpenXmlConverter ctor
             </summary>
             <param name="openXmlToHtml"></param>
+            <param name="renderer"></param>
         </member>
         <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToHtml(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>

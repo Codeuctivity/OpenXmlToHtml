@@ -61,7 +61,7 @@ namespace OpenXmlToHtmlTests
             Assert.True(IsValidBitmap(exportedImages.Last().Value));
         }
 
-        private bool IsValidBitmap(byte[] blob)
+        private static bool IsValidBitmap(byte[] blob)
         {
             var bitmap = new Bitmap(new MemoryStream(blob));
             return bitmap.Width > 1 && bitmap.Height > 1;
@@ -94,7 +94,7 @@ namespace OpenXmlToHtmlTests
             Assert.Equal(expectePageQuantity, pdfReader.PageCount);
         }
 
-        private void AssertXhtmlIsValid(string actualHtmlFilePath)
+        private static void AssertXhtmlIsValid(string actualHtmlFilePath)
         {
             var messages = new StringBuilder();
             var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema, DtdProcessing = DtdProcessing.Ignore };

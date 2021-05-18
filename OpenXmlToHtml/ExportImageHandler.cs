@@ -7,8 +7,14 @@ using System.Xml.Linq;
 
 namespace Codeuctivity.OpenXmlToHtml
 {
+    /// <summary>
+    /// Exports every image of an Open XML
+    /// </summary>
     public class ExportImageHandler : IImageHandler
     {
+        /// <summary>
+        /// Images of Open XML
+        /// </summary>
         public IDictionary<string, byte[]> Images { get; }
 
         public ExportImageHandler(IDictionary<string, byte[]> images)

@@ -54,7 +54,7 @@ namespace OpenXmlToHtmlOpenApiTests
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html", response.Content.Headers.ContentType.MediaType);
-            await AssertHtmlContentAsync(response.Content, ".Codeuctivity-000000", "Lorem Ipsum");
+            await AssertHtmlContentAsync(response.Content, "Lorem Ipsum");
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace OpenXmlToHtmlOpenApiTests
             Assert.Equal("application/pdf", response.Content.Headers.ContentType.MediaType);
         }
 
-        private async Task AssertHtmlContentAsync(HttpContent content, string querySelector, string expectedText)
+        private static async Task AssertHtmlContentAsync(HttpContent content, string expectedText)
         {
             var context = BrowsingContext.New(Configuration.Default);
 
