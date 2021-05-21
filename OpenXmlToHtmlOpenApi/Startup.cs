@@ -39,8 +39,8 @@ namespace OpenXmlToHtmlOpenApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IOpenXmlToHtml, OpenXmlToHtml>();
+            services.AddApplicationInsightsTelemetry();
             services.AddControllers();
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
