@@ -24,11 +24,11 @@ namespace OpenXmlToHtmlTests
 
         [Theory]
         [InlineData("EmptyDocument.docx", 0)]
-        //[InlineData("Wingdings.docx", 71000)]
+        //[InlineData("WingdingsSymbols.docx", 71000)]
         [InlineData("Symbols.docx", 71000)]
         [InlineData("SymbolRibbon.docx", 71000)]
-        [InlineData("BasicTextFormated.docx", 250)]
-        [InlineData("Images.docx", 250)]
+        [InlineData("BasicTextFormated.docx", 2000)]
+        [InlineData("Images.docx", 400)]
         public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount)
         {
             var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
@@ -65,7 +65,7 @@ namespace OpenXmlToHtmlTests
             AssertXhtmlIsValid(actuelHtml);
         }
 
-        private bool IsValidBitmap(byte[] blob)
+        private static bool IsValidBitmap(byte[] blob)
         {
             var bitmap = new Bitmap(new MemoryStream(blob));
             return bitmap.Width > 1 && bitmap.Height > 1;
@@ -98,7 +98,7 @@ namespace OpenXmlToHtmlTests
             Assert.Equal(expectePageQuantity, pdfReader.PageCount);
         }
 
-        private void AssertXhtmlIsValid(string actualHtmlFilePath)
+        private static void AssertXhtmlIsValid(string actualHtmlFilePath)
         {
             var messages = new StringBuilder();
             var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema, DtdProcessing = DtdProcessing.Ignore };

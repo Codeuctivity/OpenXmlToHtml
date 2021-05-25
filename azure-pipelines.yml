@@ -28,6 +28,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
+    publishTestResults: false
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
@@ -39,3 +40,4 @@ steps:
     appType: 'webAppLinux'
     WebAppName: 'OpenXmlConverter'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    RuntimeStack: 'DOTNETCORE|5.0'

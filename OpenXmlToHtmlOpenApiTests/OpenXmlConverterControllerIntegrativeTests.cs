@@ -54,10 +54,32 @@ namespace OpenXmlToHtmlOpenApiTests
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html", response.Content.Headers.ContentType.MediaType);
-            await AssertHtmlContentAsync(response.Content, ".Codeuctivity-000000", "Lorem Ipsum");
+            await AssertHtmlContentAsync(response.Content, "Lorem Ipsum");
         }
 
-        private async Task AssertHtmlContentAsync(HttpContent content, string querySelector, string expectedText)
+        [Fact]
+        public async Task ShouldConvertOpenXmlToPdf()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://localhost/OpenXmlConverter/ConvertToPdf");
+            using var file = new ByteArrayContent(File.ReadAllBytes("../../../TestInput/BasicTextFormated.docx"));
+            file.Headers.Add("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            var multipartContent = new MultipartFormDataContent
+            {
+                { file, "openXmlFile", Path.GetFileName("BasicTextFormated.docx") }
+            };
+            request.Content = multipartContent;
+
+            // Act
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("application/pdf", response.Content.Headers.ContentType.MediaType);
+        }
+
+        private static async Task AssertHtmlContentAsync(HttpContent content, string expectedText)
         {
             var context = BrowsingContext.New(Configuration.Default);
 
