@@ -15,7 +15,7 @@ namespace Codeuctivity.OpenXmlToHtml
 
         public WebSafeFontsHandler()
         {
-            WebSafeFontNames = new string[] { "Arial", "Verdana", "Helvetica", "Tahoma", "Trebuchet MS", "Times New Roman", "Georgia", "Garamond", "Courier New", "Brush Script MT" };
+            WebSafeFontNames = new[] { "Arial", "Verdana", "Helvetica", "Tahoma", "Trebuchet MS", "Times New Roman", "Georgia", "Garamond", "Courier New", "Brush Script MT" };
             FontHandler = new FontHandler();
         }
 

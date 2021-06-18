@@ -23,13 +23,13 @@ namespace OpenXmlToHtmlTests
         }
 
         [Theory]
-        [InlineData("EmptyDocument.docx", 0)]
+        [InlineData("EmptyDocument.docx", 0, false)]
         //[InlineData("WingdingsSymbols.docx", 71000)]
-        [InlineData("Symbols.docx", 71000)]
-        [InlineData("SymbolRibbon.docx", 71000)]
-        [InlineData("BasicTextFormated.docx", 2000)]
-        [InlineData("Images.docx", 400)]
-        public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount)
+        [InlineData("Symbols.docx", 71000, false)]
+        [InlineData("BasicTextFormated.docx", 2000, false)]
+        [InlineData("Images.docx", 400, true)]
+        [InlineData("Font.docx", 4500, true)]
+        public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount, bool useWebSafeFonts)
         {
             var sourceOpenXmlFilePath = $"../../../TestInput/{testFileName}";
             var actualHtmlFilePath = Path.Combine(Path.GetTempPath(), $"Actual{testFileName}.html");
@@ -40,7 +40,7 @@ namespace OpenXmlToHtmlTests
                 File.Delete(actualHtmlFilePath);
             }
 
-            await openXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath);
+            await openXmlToHtml.ConvertToHtmlAsync(sourceOpenXmlFilePath, actualHtmlFilePath, useWebSafeFonts);
 
             AssertXhtmlIsValid(actualHtmlFilePath);
             await DocumentAsserter.AssertRenderedHtmlIsEqual(actualHtmlFilePath, expectedHtmlFilePath, allowedPixelErrorCount);

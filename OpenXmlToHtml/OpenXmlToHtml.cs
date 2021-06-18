@@ -20,9 +20,20 @@ namespace Codeuctivity.OpenXmlToHtml
         /// </summary>
         /// <param name="sourceOpenXmlFilePath"></param>
         /// <param name="destinationHtmlFilePath"></param>
+        /// <returns>selfContainedHtmlFilePath</returns>
+        public Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath)
+        {
+            return ConvertToHtmlAsync(sourceOpenXmlFilePath, destinationHtmlFilePath, false);
+        }
+
+        /// <summary>
+        /// Converts DOCX to HTML
+        /// </summary>
+        /// <param name="sourceOpenXmlFilePath"></param>
+        /// <param name="destinationHtmlFilePath"></param>
         /// <param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
         /// <returns>selfContainedHtmlFilePath</returns>
-        public async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath, bool useWebSafeFonts = false)
+        public async Task ConvertToHtmlAsync(string sourceOpenXmlFilePath, string destinationHtmlFilePath, bool useWebSafeFonts)
         {
             if (!File.Exists(sourceOpenXmlFilePath))
             {
@@ -39,11 +50,32 @@ namespace Codeuctivity.OpenXmlToHtml
         /// Converts DOCX to HTML
         /// </summary>
         /// <param name="sourceOpenXml"></param>
+        /// <returns>selfContainedHtml</returns>
+        public Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml)
+        {
+            return ConvertToHtmlAsync(sourceOpenXml, false);
+        }
+
+        /// <summary>
+        /// Converts DOCX to HTML
+        /// </summary>
+        /// <param name="sourceOpenXml"></param>
         /// <param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
         /// <returns>selfContainedHtml</returns>
-        public Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, bool useWebSafeFonts = false)
+        public Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, bool useWebSafeFonts)
         {
             return ConvertToHtmlAsync(sourceOpenXml, string.Empty, useWebSafeFonts);
+        }
+
+        /// <summary>
+        /// Converts DOCX to HTML
+        /// </summary>
+        /// <param name="sourceOpenXml"></param>
+        /// <param name="fallbackPageTitle"></param>
+        /// <returns>selfContainedHtml</returns>
+        public Task<Stream> ConvertToHtmlAsync(Stream sourceOpenXml, string fallbackPageTitle)
+        {
+            return ConvertToHtmlAsync(sourceOpenXml, fallbackPageTitle, false);
         }
 
         /// <summary>
