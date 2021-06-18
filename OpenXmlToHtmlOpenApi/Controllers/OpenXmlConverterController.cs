@@ -30,15 +30,16 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         /// Converts OpenXmlFile to HTML
         /// </summary>
         /// <param name="openXmlFile"></param>
+        /// <param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
         /// <returns>HTML</returns>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> ConvertToHtml(IFormFile openXmlFile)
+        public async Task<IActionResult> ConvertToHtml(IFormFile openXmlFile, bool useWebSafeFonts)
         {
             if (openXmlFile.Length > 0)
             {
-                var htmlStream = await _openXmlToHtml.ConvertToHtmlAsync(openXmlFile.OpenReadStream());
+                var htmlStream = await _openXmlToHtml.ConvertToHtmlAsync(openXmlFile.OpenReadStream(), useWebSafeFonts);
                 return File(htmlStream, "text/html");
             }
             return BadRequest("Request contains no document");
@@ -48,12 +49,13 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         /// Converts OpenXmlFile to PDF
         /// </summary>
         /// <param name="openXmlFile"></param>
+        /// <param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
         /// <returns>PDF</returns>
         [HttpPost]
         [Route("ConvertToPdf")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile)
+        public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile, bool useWebSafeFonts)
         {
             await using var chromiumRenderer = await Renderer.CreateAsync();
             if (openXmlFile.Length > 0)
@@ -61,7 +63,7 @@ namespace OpenXmlToHtmlOpenApi.Controllers
                 var pathHtml = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.html");
                 var pathPdf = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.pdf");
 
-                var htmlStream = await _openXmlToHtml.ConvertToHtmlAsync(openXmlFile.OpenReadStream());
+                var htmlStream = await _openXmlToHtml.ConvertToHtmlAsync(openXmlFile.OpenReadStream(), useWebSafeFonts);
                 try
                 {
                     using var fileStreamHtml = new FileStream(pathHtml, FileMode.CreateNew);

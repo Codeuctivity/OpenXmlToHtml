@@ -15,18 +15,20 @@
             </summary>
             <param name="openXmlToHtml"></param>
         </member>
-        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToHtml(Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToHtml(Microsoft.AspNetCore.Http.IFormFile,System.Boolean)">
             <summary>
             Converts OpenXmlFile to HTML
             </summary>
             <param name="openXmlFile"></param>
+            <param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
             <returns>HTML</returns>
         </member>
-        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToPdf(Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToPdf(Microsoft.AspNetCore.Http.IFormFile,System.Boolean)">
             <summary>
             Converts OpenXmlFile to PDF
             </summary>
             <param name="openXmlFile"></param>
+            <param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
             <returns>PDF</returns>
         </member>
         <member name="T:OpenXmlToHtmlOpenApi.Program">
