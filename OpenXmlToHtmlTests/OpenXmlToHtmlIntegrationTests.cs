@@ -55,7 +55,7 @@ namespace OpenXmlToHtmlTests
             using var sourceIpenXml = new FileStream(sourceOpenXmlFilePath, FileMode.Open, FileAccess.Read);
             var exportedImages = new Dictionary<string, byte[]>();
 
-            var actuelHtml = await OpenXmlToHtml.ConvertToHtmlAsync(sourceIpenXml, "fallbackTitle", exportedImages);
+            var actuelHtml = await OpenXmlToHtml.ConvertToHtmlAsync(sourceIpenXml, "fallbackTitle", exportedImages, false);
 
             Assert.Equal(2, exportedImages.Count);
 
