@@ -12,8 +12,6 @@ build:
   publish_nuget_symbols: true
   use_snupkg_format: true
   verbosity: minimal
-install:
-  - sudo apt-get update && curl -o ./ttf-mscorefonts-installer_3.8_all.deb http://httpredir.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb && sudo apt --no-install-recommends install -y ./ttf-mscorefonts-installer_3.8_all.deb || rm ./ttf-mscorefonts-installer_3.8_all.deb
 after_build:
   - ps: dotnet publish ./OpenXmlToHtmlCli -p:PublishProfile=OpenXmlToHtmlCliWindows
   - ps: dotnet publish ./OpenXmlToHtmlOpenApi -p:PublishProfile=OpenXmlToHtmlOpenApi
