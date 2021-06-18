@@ -11,7 +11,6 @@ Converts docx to html
 - Demo CLI Api [OpenXmlToHtmlCli.zip](https://github.com/Codeuctivity/OpenXmlToHtml/releases)
 - [Demo Open Api](http://openxmlconverter.azurewebsites.net/index.html)
 
-
 ```c#
 await OpenXmlToHtml.ConvertToHtmlAsync(inputPathDocx, outputPathHtml);
 ```
