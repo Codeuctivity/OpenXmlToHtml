@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
     <PackageReference Include="OpenXmlPowerToolsStandard" Version="5.0.119" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="8.24.0.32949">
       <PrivateAssets>all</PrivateAssets>
