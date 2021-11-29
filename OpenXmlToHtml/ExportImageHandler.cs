@@ -26,7 +26,7 @@ namespace Codeuctivity.OpenXmlToHtml
         {
             var cid = Guid.NewGuid().ToString();
             using var memoryStream = new MemoryStream();
-            imageInfo.Bitmap.Save(memoryStream, imageInfo.Bitmap.RawFormat);
+            imageInfo.Image.CopyTo(memoryStream);
 
             Images.Add(cid, memoryStream.ToArray());
 

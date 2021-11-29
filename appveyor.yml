@@ -1,7 +1,7 @@
 version: 1.0.{build}
 image:
   - Ubuntu
-  - Visual Studio 2019
+  - Visual Studio 2022
 skip_tags: true
 configuration: Release
 before_build:
@@ -26,9 +26,9 @@ dotnet_csproj:
   informational_version: "{version}"
 
 artifacts:
-  - path: OpenXmlToHtmlCli/bin/Release/net5.0/win-x64/publish
+  - path: OpenXmlToHtmlCli/bin/Release/net6.0/win-x64/publish
     name: OpenXmlToHtmlCli
-  - path: OpenXmlToHtmlOpenApi/bin/Release/net5.0/publish
+  - path: OpenXmlToHtmlOpenApi/bin/Release/net6.0/publish
     name: OpenXmlToHtmlOpenApi
 
 deploy:

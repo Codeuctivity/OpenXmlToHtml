@@ -1,8 +1,9 @@
 ﻿using Codeuctivity.OpenXmlToHtml;
 using OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace OpenXmlToHtmlTests
@@ -10,16 +11,21 @@ namespace OpenXmlToHtmlTests
     public class ExportImageHandlerTests
     {
         [Fact]
-        public void ShouldUseExportImageHandler()
+        public async Task ShouldUseExportImageHandlerAsync()
         {
             var sourcePngFilePath = $"../../../TestInput/TestInput.png";
             var exportTarget = new Dictionary<string, byte[]>();
-            var someBitmap = new Bitmap(sourcePngFilePath);
+            using var fileStream = new FileStream(sourcePngFilePath, FileMode.Open, FileAccess.Read);
+            using var memorystream = new MemoryStream();
+            await fileStream.CopyToAsync(memorystream);
+            var expectedImage = memorystream.ToArray();
+
+            fileStream.Position = 0;
 
             var imageInfo = new ImageInfo
             {
                 AltText = "AltText",
-                Bitmap = someBitmap,
+                Image = fileStream,
             };
 
             var exportImageHandler = new ExportImageHandler(exportTarget);
@@ -28,14 +34,9 @@ namespace OpenXmlToHtmlTests
 
             Assert.True(exportTarget.Count == 1);
             var exportedImage = exportTarget.Single();
-            Assert.Equal(exportedImage.Value, ImageToByte(someBitmap));
-            Assert.Equal($"<img src=\"cid: { exportedImage.Key}\" alt=\"AltText\" xmlns=\"http://www.w3.org/1999/xhtml\" />", actual.ToString());
-        }
 
-        public static byte[] ImageToByte(Image img)
-        {
-            var converter = new ImageConverter();
-            return (byte[])converter.ConvertTo(img, typeof(byte[]));
+            Assert.Equal(exportedImage.Value, expectedImage);
+            Assert.Equal($"<img src=\"cid: { exportedImage.Key}\" alt=\"AltText\" xmlns=\"http://www.w3.org/1999/xhtml\" />", actual.ToString());
         }
     }
 }
