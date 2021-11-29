@@ -1,4 +1,5 @@
 ﻿using Codeuctivity.PuppeteerSharp;
+using SixLabors.ImageSharp;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -21,10 +22,10 @@ namespace OpenXmlToHtmlTests
 
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceFilePath not found \n{expectFullPath}\n copy over \n{pathRasterizedHtml}\n if this is a new test case.");
 
-            AssertImageIsEqual(pathRasterizedHtml, expectReferenceFilePath, allowedPixelErrorCount);
+            await AssertImageIsEqualAsync(pathRasterizedHtml, expectReferenceFilePath, allowedPixelErrorCount);
         }
 
-        internal static void AssertImageIsEqual(string actualImagePath, string expectImageFilePath, int allowedPixelErrorCount)
+        internal static async Task AssertImageIsEqualAsync(string actualImagePath, string expectImageFilePath, int allowedPixelErrorCount)
         {
             var actualFullPath = Path.GetFullPath(actualImagePath);
             var expectFullPath = Path.GetFullPath(expectImageFilePath);
@@ -33,7 +34,7 @@ namespace OpenXmlToHtmlTests
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
             var base64fyedActualImage = Convert.ToBase64String(File.ReadAllBytes(actualFullPath));
 
-            if (Codeuctivity.BitmapCompare.Compare.ImageAreEqual(actualFullPath, expectFullPath))
+            if (Codeuctivity.ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath))
             {
                 return;
             }
@@ -44,25 +45,25 @@ namespace OpenXmlToHtmlTests
             var newDiffImage = $"{actualFullPath}.diff.png";
             try
             {
-                using (var maskImage = Codeuctivity.BitmapCompare.Compare.CalcDiffMaskImage(actualFullPath, expectFullPath))
+                using (var maskImage = Codeuctivity.ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
                 {
-                    maskImage.Save(newDiffImage);
+                    await maskImage.SaveAsync(newDiffImage);
                 }
                 var base64fyedImageDiff = Convert.ToBase64String(File.ReadAllBytes(newDiffImage));
 
                 if (File.Exists(allowedDiffImage))
                 {
-                    var resultWithAllowedDiff = Codeuctivity.BitmapCompare.Compare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
+                    var resultWithAllowedDiff = Codeuctivity.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
 
                     Assert.True(resultWithAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
                     return;
                 }
 
-                var result = Codeuctivity.BitmapCompare.Compare.CalcDiff(actualFullPath, expectFullPath);
+                var result = Codeuctivity.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
 
                 Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
             }
-            catch (Codeuctivity.BitmapCompare.CompareException)
+            catch (Codeuctivity.ImageSharpCompareException)
             {
                 Assert.True(false, $"Actual Dimension differs from expected \nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \nReplace {expectFullPath} with the new value.");
             }

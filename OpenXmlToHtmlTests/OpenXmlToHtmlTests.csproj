@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
@@ -9,16 +9,17 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
+
   <ItemGroup>
-    <PackageReference Include="BitmapCompare" Version="1.0.8" />
+    <PackageReference Include="ImageSharpCompare" Version="1.1.98" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
     <PackageReference Include="PuppeteerSharp.Renderer" Version="1.1.40" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.24.0.32949">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.32.0.39516">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
