@@ -1,16 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenXmlToHtml", "OpenXmlToHtml\OpenXmlToHtml.csproj", "{D3FE5D0D-4ED4-41D4-B3EF-116F5140B1CB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FC3F4498-FA14-48A8-AA41-8D9095A0844F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		appveyor.yml = appveyor.yml
-		azure-pipelines.yml = azure-pipelines.yml
+		cla.md = cla.md
+		.github\workflows\cla.yml = .github\workflows\cla.yml
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		README.md = README.md
+		.github\workflows\stale.yml = .github\workflows\stale.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenXmlToHtmlTests", "OpenXmlToHtmlTests\OpenXmlToHtmlTests.csproj", "{A1A7AF98-904A-4B85-B9FF-3DC985DEA382}"

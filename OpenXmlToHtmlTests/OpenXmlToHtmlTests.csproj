@@ -1,38 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-    <IsPackable>false</IsPackable>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net6.0</TargetFrameworks>
+		<IsPackable>false</IsPackable>
+		<LangVersion>9.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	</PropertyGroup>
 
 
-  <ItemGroup>
-    <PackageReference Include="ImageSharpCompare" Version="1.1.98" />
-    <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
-    <PackageReference Include="PuppeteerSharp.Renderer" Version="1.1.40" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.32.0.39516">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Codeuctivity.HtmlRenderer" Version="2.1.46" />
+		<PackageReference Include="Codeuctivity.ImageSharpCompare" Version="2.0.61" />
+		<PackageReference Include="Moq" Version="4.18.1" />
+		<PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.40.0.48530">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OpenXmlToHtml\OpenXmlToHtml.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OpenXmlToHtml\OpenXmlToHtml.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EditorConfigFiles Update="C:\Users\Stefan\source\repos\OpenXmlToHtml\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+	<ItemGroup>
+		<EditorConfigFiles Update="C:\Users\Stefan\source\repos\OpenXmlToHtml\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
 
 </Project>
