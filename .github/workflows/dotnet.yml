@@ -46,7 +46,7 @@ jobs:
       if:  env.NUGET_TOKEN_EXISTS != ''
       run: |
           ls ./OpenXmlToHtml/bin/Release
-          dotnet nuget push ./OpenXmlToHtml/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
+          dotnet nuget push .\OpenXmlToHtml\bin/Release\*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -80,13 +80,6 @@ jobs:
         path: .\OpenXmlToHtmlCli\bin\Release\net6.0\win-x64\publish
         type: 'zip'
         filename: 'OpenXmlToHtmlCli.zip'
-    - name: NugetPush
-      env: 
-          NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TEST_TOKEN }}
-      if:  env.NUGET_TOKEN_EXISTS != ''
-      run: |
-          ls ./OpenXmlToHtml/bin/Release
-          dotnet nuget push ./OpenXmlToHtml/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -98,6 +91,13 @@ jobs:
           ./OpenXmlToHtml/bin/Release/*.snupkg
           ./OpenXmlToHtmlCli.zip
           ./OpenXmlToHtmlOpenApi/bin/Release/net6.0/OpenXmlToHtmlOpenApi.zip
+    - name: NugetPush
+      env: 
+          NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TEST_TOKEN }}
+      if:  env.NUGET_TOKEN_EXISTS != ''
+      run: |
+          ls ./OpenXmlToHtml/bin/Release
+          dotnet nuget push .\OpenXmlToHtml\bin\Release\*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
 
   deployAzure:
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/AzureAppPublishUsingGithubActions'}}
