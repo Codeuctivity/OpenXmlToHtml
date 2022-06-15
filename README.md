@@ -2,7 +2,7 @@
 
 Converts docx to html
 
-[![Nuget](https://img.shields.io/nuget/v/OpenXmlToHtml.svg)](https://www.nuget.org/packages/OpenXmlToHtml/) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/7ba69957e12f4348a25e14e7db124cd6)](https://www.codacy.com/gh/Codeuctivity/OpenXmlToHtml/dashboard?utm_source=github.com&utm_medium=referral&utm_content=Codeuctivity/OpenXmlToHtml&utm_campaign=Badge_Grade) [![Build](https://github.com/Codeuctivity/OpenXmlToHtml/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Codeuctivity/OpenXmlToHtml/actions/workflows/dotnet.yml)
+[![Nuget](https://img.shields.io/nuget/v/OpenXmlToHtml.svg)](https://www.nuget.org/packages/OpenXmlToHtml/) [![Build](https://github.com/Codeuctivity/OpenXmlToHtml/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Codeuctivity/OpenXmlToHtml/actions/workflows/dotnet.yml)
 
 - 100% .net implementation
 - No external infrastructure needed

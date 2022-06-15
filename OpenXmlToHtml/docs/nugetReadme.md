@@ -1,5 +1,5 @@
 Converts DOCX to HTML:
 
 ```csharp
-	await new OpenXmlToHtml().ConvertToHtmlAsync(inputPathDocx, outputPathHtml);
+await new OpenXmlToHtml().ConvertToHtmlAsync(inputPathDocx, outputPathHtml);
 ```
