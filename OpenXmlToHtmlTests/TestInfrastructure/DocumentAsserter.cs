@@ -1,6 +1,6 @@
-﻿using Codeuctivity.PuppeteerSharp;
+﻿using Codeuctivity.HtmlRenderer;
+using Codeuctivity.ImageSharpCompare;
 using SixLabors.ImageSharp;
-using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -32,9 +32,8 @@ namespace OpenXmlToHtmlTests
 
             Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
-            var base64fyedActualImage = Convert.ToBase64String(File.ReadAllBytes(actualFullPath));
 
-            if (Codeuctivity.ImageSharpCompare.ImageAreEqual(actualFullPath, expectFullPath))
+            if (ImageSharpCompare.ImagesAreEqual(actualFullPath, expectFullPath))
             {
                 return;
             }
@@ -43,34 +42,39 @@ namespace OpenXmlToHtmlTests
 
             var allowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
             var newDiffImage = $"{actualFullPath}.diff.png";
-            try
+
+            if (!ImageSharpCompare.ImagesHaveEqualSize(actualFullPath, expectFullPath))
             {
-                using (var maskImage = Codeuctivity.ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
+                Assert.True(false, $"Actual Dimension differs from expected \nExpected {expectFullPath}\ndiffers to actual {actualFullPath} \nReplace {expectFullPath} with the new value.");
+            }
+
+            using (var maskImage = ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
+            {
+                await maskImage.SaveAsync(newDiffImage);
+            }
+
+            if (File.Exists(allowedDiffImage))
+            {
+                // Uncomment following line to update a allowed diff file
+                //File.Copy(actualFullPath, allowedDiffImage, true);
+
+                if (!ImageSharpCompare.ImagesHaveEqualSize(actualFullPath, allowedDiffImage))
                 {
-                    await maskImage.SaveAsync(newDiffImage);
-                }
-                var base64fyedImageDiff = Convert.ToBase64String(File.ReadAllBytes(newDiffImage));
-
-                if (File.Exists(allowedDiffImage))
-                {
-                    var resultWithAllowedDiff = Codeuctivity.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
-
-                    Assert.True(resultWithAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\n");
-                    return;
+                    Assert.True(false, $"AllowedDiffImage Dimension differs from allowed \nReplace {allowedDiffImage} with {actualFullPath}.");
                 }
 
-                var result = Codeuctivity.ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
+                var resultWithAllowedDiff = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
 
-                Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \n Diff is {newDiffImage} \n {base64fyedImageDiff}\nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
+                Assert.True(resultWithAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}\n");
+                return;
             }
-            catch (Codeuctivity.ImageSharpCompareException)
-            {
-                Assert.True(false, $"Actual Dimension differs from expected \nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n {base64fyedActualImage}\n \nReplace {expectFullPath} with the new value.");
-            }
-            catch (ArgumentOutOfRangeException exception)
-            {
-                throw new Exception($"Failed to parse actual image \n {base64fyedActualImage}", exception);
-            }
+
+            var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
+
+            // Uncomment following line to create a allowed diff file
+            //File.Copy(actualFullPath, allowedDiffImage, true);
+
+            Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage} \nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
         }
     }
 }

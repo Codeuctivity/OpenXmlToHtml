@@ -1,5 +1,5 @@
-﻿using Codeuctivity.OpenXmlToHtml;
-using OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
+﻿using Codeuctivity.OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
+using Codeuctivity.OpenXmlToHtml;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace OpenXmlToHtmlTests
             var exportedImage = exportTarget.Single();
 
             Assert.Equal(exportedImage.Value, expectedImage);
-            Assert.Equal($"<img src=\"cid: { exportedImage.Key}\" alt=\"AltText\" xmlns=\"http://www.w3.org/1999/xhtml\" />", actual.ToString());
+            Assert.Equal($"<img src=\"cid: {exportedImage.Key}\" alt=\"AltText\" xmlns=\"http://www.w3.org/1999/xhtml\" />", actual.ToString());
         }
     }
 }

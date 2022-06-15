@@ -1,7 +1,7 @@
-﻿using Codeuctivity.OpenXmlToHtml;
+﻿using Codeuctivity.OpenXmlPowerTools;
+using Codeuctivity.OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
+using Codeuctivity.OpenXmlToHtml;
 using Moq;
-using OpenXmlPowerTools;
-using OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
 using System.Linq;
 using System.Xml.Linq;
 using Xunit;

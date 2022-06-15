@@ -1,5 +1,5 @@
-using OpenXmlPowerTools;
-using OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
+using Codeuctivity.OpenXmlPowerTools;
+using Codeuctivity.OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
 using System.Collections.Generic;
 using System.Xml.Linq;
 

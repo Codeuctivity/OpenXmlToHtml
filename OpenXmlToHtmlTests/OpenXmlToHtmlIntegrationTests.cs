@@ -1,8 +1,9 @@
+using Codeuctivity.HtmlRenderer;
 using Codeuctivity.OpenXmlToHtml;
-using Codeuctivity.PuppeteerSharp;
 using PdfSharp.Pdf.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace OpenXmlToHtmlTests
         [InlineData("EmptyDocument.docx", 0, false)]
         //[InlineData("WingdingsSymbols.docx", 71000)]
         [InlineData("Symbols.docx", 71000, false)]
-        [InlineData("BasicTextFormated.docx", 2000, false)]
+        [InlineData("BasicTextFormated.docx", 3000, false)]
         [InlineData("Images.docx", 400, true)]
         [InlineData("Font.docx", 4500, true)]
         public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount, bool useWebSafeFonts)
@@ -67,8 +68,8 @@ namespace OpenXmlToHtmlTests
 
         private static bool IsValidBitmap(byte[] blob)
         {
-            var bitmap = new Bitmap(new MemoryStream(blob));
-            return bitmap.Width > 1 && bitmap.Height > 1;
+            var image = Image.Load<Rgba32>(blob);
+            return image.Width > 1 && image.Height > 1;
         }
 
         [Fact]

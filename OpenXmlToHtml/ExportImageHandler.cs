@@ -1,5 +1,5 @@
-﻿using OpenXmlPowerTools;
-using OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
+﻿using Codeuctivity.OpenXmlPowerTools;
+using Codeuctivity.OpenXmlPowerTools.OpenXMLWordprocessingMLToHtmlConverter;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,11 +17,20 @@ namespace Codeuctivity.OpenXmlToHtml
         /// </summary>
         public IDictionary<string, byte[]> Images { get; }
 
+        /// <summary>
+        /// Transforms OpenXml Images to HTML embeddable images
+        /// </summary>
+        /// <param name="images"></param>
         public ExportImageHandler(IDictionary<string, byte[]> images)
         {
             Images = images;
         }
 
+        /// <summary>
+        /// Transforms images to Content-ID based embedded value
+        /// </summary>
+        /// <param name="imageInfo"></param>
+        /// <returns></returns>
         public XElement TransformImage(ImageInfo imageInfo)
         {
             var cid = Guid.NewGuid().ToString();
