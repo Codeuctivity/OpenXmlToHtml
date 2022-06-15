@@ -40,7 +40,9 @@ namespace OpenXmlToHtmlOpenApiTests
         private static bool IsRunningOnWsl()
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
                 return false;
+            }
 
             var version = File.ReadAllText("/proc/version");
             var IsWsl = version.Contains("Microsoft", StringComparison.InvariantCultureIgnoreCase);

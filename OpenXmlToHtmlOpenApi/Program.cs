@@ -17,7 +17,9 @@ namespace OpenXmlToHtmlOpenApi
         public static void Main(string[] args)
         {
             if (IsRunningOnAzureLinux())
+            {
                 new Azure().SetupChromeiumDependencies();
+            }
 
             CreateHostBuilder(args).Build().Run();
         }
