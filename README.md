@@ -14,6 +14,15 @@ Converts docx to html
 await OpenXmlToHtml.ConvertToHtmlAsync(inputPathDocx, outputPathHtml);
 ```
 
+## Pdf Output on azure linux plan
+
+For the pdf conversion there are some dependencies missing on azure.
+
+```bash
+export DEBIAN_FRONTEND="noninteractive"
+apt-get install -y libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2 libpangox-1.0-0
+```
+
 ## Fonts and Linux - WIP Section
 
 Some windows specific fonts used in many docx can be installed on linux using

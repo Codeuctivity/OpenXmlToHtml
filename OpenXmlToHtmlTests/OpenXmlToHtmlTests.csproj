@@ -11,7 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Codeuctivity.HtmlRenderer" Version="2.1.46" />
+		<PackageReference Include="Codeuctivity.HtmlRenderer" Version="2.1.55" />
 		<PackageReference Include="Codeuctivity.ImageSharpCompare" Version="2.0.61" />
 		<PackageReference Include="Moq" Version="4.18.1" />
 		<PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
