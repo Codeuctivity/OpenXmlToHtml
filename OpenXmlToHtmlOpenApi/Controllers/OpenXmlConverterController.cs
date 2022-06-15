@@ -58,8 +58,9 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile, bool useWebSafeFonts)
         {
-            var azureSpecificLaunchParameter = "--no-sandbox --disable-setuid-sandbox --disable-gpu";
+            //var azureSpecificLaunchParameter = "--no-sandbox --disable-setuid-sandbox --disable-gpu";
 
+            //await using var chromiumRenderer = await Renderer.CreateAsync(new BrowserFetcher(), azureSpecificLaunchParameter);
             await using var chromiumRenderer = await Renderer.CreateAsync(new BrowserFetcher(), azureSpecificLaunchParameter);
             if (openXmlFile.Length > 0)
             {
