@@ -2,7 +2,6 @@
 using Codeuctivity.OpenXmlToHtml;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PuppeteerSharp;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -58,10 +57,7 @@ namespace OpenXmlToHtmlOpenApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> ConvertToPdf(IFormFile openXmlFile, bool useWebSafeFonts)
         {
-            //var azureSpecificLaunchParameter = "--no-sandbox --disable-setuid-sandbox --disable-gpu";
-
-            //await using var chromiumRenderer = await Renderer.CreateAsync(new BrowserFetcher(), azureSpecificLaunchParameter);
-            await using var chromiumRenderer = await Renderer.CreateAsync(new BrowserFetcher(), azureSpecificLaunchParameter);
+            await using var chromiumRenderer = await Renderer.CreateAsync();
             if (openXmlFile.Length > 0)
             {
                 var pathHtml = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.html");
