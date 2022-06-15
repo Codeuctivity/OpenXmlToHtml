@@ -4,6 +4,16 @@
         <name>OpenXmlToHtmlOpenApi</name>
     </assembly>
     <members>
+        <member name="T:OpenXmlToHtmlOpenApi.Azure">
+            <summary>
+            Setup dependecies on Azure App Service with Linux plan
+            </summary>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Azure.SetupChromeiumDependencies">
+            <summary>
+            Installs every known dependency of chromium used to render html to pdf
+            </summary>
+        </member>
         <member name="T:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController">
             <summary>
             OpenXml converter
