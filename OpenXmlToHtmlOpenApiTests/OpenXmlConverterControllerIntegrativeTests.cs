@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,11 +18,13 @@ namespace OpenXmlToHtmlOpenApiTests
             _factory = factory;
         }
 
-        [Theory]
+        [SkippableTheory]
         [InlineData("/", "text/html; charset=utf-8")]
         [InlineData("/swagger/v1/swagger.json", "application/json; charset=utf-8")]
         public async Task ShouldAccessEndpointSuccessfull(string route, string contentType)
         {
+            Skip.If(IsRunningOnWsl());
+
             // Arrange
             var client = _factory.CreateClient();
             var expectedUrl = new Uri($"https://localhost{route}");
@@ -34,9 +37,21 @@ namespace OpenXmlToHtmlOpenApiTests
             Assert.Equal(contentType, response.Content.Headers.ContentType.ToString());
         }
 
-        [Fact]
+        private static bool IsRunningOnWsl()
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return false;
+
+            var version = File.ReadAllText("/proc/version");
+            var IsWsl = version.Contains("Microsoft", StringComparison.InvariantCultureIgnoreCase);
+            return IsWsl;
+        }
+
+        [SkippableFact]
         public async Task ShouldConvertOpenXmlToHtml()
         {
+            Skip.If(IsRunningOnWsl());
+
             // Arrange
             var client = _factory.CreateClient();
             using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://localhost/OpenXmlConverter");
@@ -57,9 +72,11 @@ namespace OpenXmlToHtmlOpenApiTests
             await AssertHtmlContentAsync(response.Content, "Lorem Ipsum");
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task ShouldConvertOpenXmlToPdf()
         {
+            Skip.If(IsRunningOnWsl());
+
             // Arrange
             var client = _factory.CreateClient();
             using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://localhost/OpenXmlConverter/ConvertToPdf");
