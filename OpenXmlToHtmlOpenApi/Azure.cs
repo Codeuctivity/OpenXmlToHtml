@@ -12,7 +12,7 @@ namespace OpenXmlToHtmlOpenApi
         /// </summary>
         public void SetupChromeiumDependencies()
         {
-            var azureLinuxAppChromeDependencies = "export DEBIAN_FRONTEND=noninteractive && bash -c 'apt update && apt upgrade -y apt install mc libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libasound2 libnss3 -y >/dev/null 2>&1 & disown'";
+            var azureLinuxAppChromeDependencies = "export DEBIAN_FRONTEND=noninteractive && bash -c 'apt update && apt upgrade -y && apt install mc libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libasound2 libnss3 -y >/dev/null 2>&1 & disown'";
 
             var escapedArgs = azureLinuxAppChromeDependencies.Replace("\"", "\\\"");
 
