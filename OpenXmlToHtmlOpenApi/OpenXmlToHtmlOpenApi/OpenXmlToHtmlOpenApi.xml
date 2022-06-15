@@ -1,82 +1,82 @@
 <?xml version="1.0"?>
 <doc>
-	<assembly>
-		<name>OpenXmlToHtmlOpenApi</name>
-	</assembly>
-	<members>
-		<member name="T:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController">
-			<summary>
-				OpenXml converter
-			</summary>
-		</member>
-		<member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.#ctor(Codeuctivity.OpenXmlToHtml.IOpenXmlToHtml)">
-			<summary>
-				OpenXmlConverter ctor
-			</summary>
-			<param name="openXmlToHtml"></param>
-		</member>
-		<member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToHtml(Microsoft.AspNetCore.Http.IFormFile,System.Boolean)">
-			<summary>
-				Converts OpenXmlFile to HTML
-			</summary>
-			<param name="openXmlFile"></param>
-			<param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
-			<returns>HTML</returns>
-		</member>
-		<member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToPdf(Microsoft.AspNetCore.Http.IFormFile,System.Boolean)">
-			<summary>
-				Converts OpenXmlFile to PDF
-			</summary>
-			<param name="openXmlFile"></param>
-			<param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
-			<returns>PDF</returns>
-		</member>
-		<member name="T:OpenXmlToHtmlOpenApi.Program">
-			<summary>
-				Program
-			</summary>
-		</member>
-		<member name="M:OpenXmlToHtmlOpenApi.Program.Main(System.String[])">
-			<summary>
-				Main entry point
-			</summary>
-			<param name="args"></param>
-		</member>
-		<member name="M:OpenXmlToHtmlOpenApi.Program.CreateHostBuilder(System.String[])">
-			<summary>
-				Called on start
-			</summary>
-			<param name="args"></param>
-			<returns></returns>
-		</member>
-		<member name="T:OpenXmlToHtmlOpenApi.Startup">
-			<summary>
-				Asp .net application startup code
-			</summary>
-		</member>
-		<member name="M:OpenXmlToHtmlOpenApi.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
-			<summary>
-				Startup
-			</summary>
-			<param name="configuration"></param>
-		</member>
-		<member name="P:OpenXmlToHtmlOpenApi.Startup.Configuration">
-			<summary>
-				Application configuration
-			</summary>
-		</member>
-		<member name="M:OpenXmlToHtmlOpenApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-			<summary>
-				This method gets called by the runtime. Use this method to add services to the container.
-			</summary>
-			<param name="services"></param>
-		</member>
-		<member name="M:OpenXmlToHtmlOpenApi.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
-			<summary>
-				This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-			</summary>
-			<param name="app"></param>
-			<param name="env"></param>
-		</member>
-	</members>
+    <assembly>
+        <name>OpenXmlToHtmlOpenApi</name>
+    </assembly>
+    <members>
+        <member name="T:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController">
+            <summary>
+            OpenXml converter
+            </summary>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.#ctor(Codeuctivity.OpenXmlToHtml.IOpenXmlToHtml)">
+            <summary>
+            OpenXmlConverter ctor
+            </summary>
+            <param name="openXmlToHtml"></param>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToHtml(Microsoft.AspNetCore.Http.IFormFile,System.Boolean)">
+            <summary>
+            Converts OpenXmlFile to HTML
+            </summary>
+            <param name="openXmlFile"></param>
+            <param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
+            <returns>HTML</returns>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Controllers.OpenXmlConverterController.ConvertToPdf(Microsoft.AspNetCore.Http.IFormFile,System.Boolean)">
+            <summary>
+            Converts OpenXmlFile to PDF
+            </summary>
+            <param name="openXmlFile"></param>
+            <param name="useWebSafeFonts">Use 'true' to replace every non web safe font with some fallback. Default is false.</param>
+            <returns>PDF</returns>
+        </member>
+        <member name="T:OpenXmlToHtmlOpenApi.Program">
+            <summary>
+            Program
+            </summary>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Program.Main(System.String[])">
+            <summary>
+            Main entry point
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Called on start
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OpenXmlToHtmlOpenApi.Startup">
+            <summary>
+            Asp .net application startup code
+            </summary>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Startup
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:OpenXmlToHtmlOpenApi.Startup.Configuration">
+            <summary>
+            Application configuration
+            </summary>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:OpenXmlToHtmlOpenApi.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
 </doc>

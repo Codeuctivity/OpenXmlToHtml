@@ -39,14 +39,23 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: |
+          dotnet build --configuration Release --no-restore
+          dotnet publish ./OpenXmlToHtmlOpenApi -c Release /p:WebPublishMethod=Package
+          dotnet publish ./OpenXmlToHtmlCli -c Release
+    - name: Zip 
+      uses: thedoctor0/zip-release@main
+      with:
+        path: .\OpenXmlToHtmlCli\bin\Release\net6.0\win-x64\publish
+        type: 'zip'
+        filename: 'OpenXmlToHtmlCli.zip'
     - name: NugetPush
       env: 
           NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TOKEN }}
       if:  env.NUGET_TOKEN_EXISTS != ''
       run: |
           ls ./OpenXmlToHtml/bin/Release
-          dotnet nuget push .\OpenXmlToHtml\bin/Release\*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
+          dotnet nuget push .\OpenXmlToHtml\bin\Release\*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -56,6 +65,8 @@ jobs:
         files: |
           ./OpenXmlToHtml/bin/Release/*.nupkg
           ./OpenXmlToHtml/bin/Release/*.snupkg
+          ./OpenXmlToHtmlCli.zip
+          ./OpenXmlToHtmlOpenApi/bin/Release/net6.0/OpenXmlToHtmlOpenApi.zip
 
   deployTest:
     if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/AzureAppPublishUsingGithubActions' }}
