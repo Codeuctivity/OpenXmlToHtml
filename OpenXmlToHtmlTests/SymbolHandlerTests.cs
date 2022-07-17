@@ -10,7 +10,7 @@ namespace OpenXmlToHtmlTests
     public class SymbolHandlerTests
     {
         [Fact]
-        public void ShouldTranslateSymbolsToUnicode()
+        public void ShouldTranslateSymbolsBulletPointToUnicodeMiddlePoint()
         {
             var fontFamily = new Dictionary<string, string>
             {

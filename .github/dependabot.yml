@@ -36,3 +36,4 @@ updates:
       - dependency-name: "Microsoft.AspNetCore.Identity.UI"
       - dependency-name: "Microsoft.VisualStudio.Web.CodeGeneration.Design"
       - dependency-name: "Codeuctivity.ImageSharpCompare"
+      - dependency-name: "coverlet.collector"
