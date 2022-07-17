@@ -1,7 +1,9 @@
 ﻿using Codeuctivity.HtmlRenderer;
 using Codeuctivity.ImageSharpCompare;
 using SixLabors.ImageSharp;
+using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,6 +12,8 @@ namespace OpenXmlToHtmlTests
 {
     internal static class DocumentAsserter
     {
+        public static string TestsOutputDirectory => Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Generated");
+
         internal static async Task AssertRenderedHtmlIsEqual(string actualFilePath, string expectReferenceFilePath, int allowedPixelErrorCount)
         {
             var actualFullPath = Path.GetFullPath(actualFilePath);
@@ -33,11 +37,15 @@ namespace OpenXmlToHtmlTests
             // Uncomment following line to update or create an expectaion file
             //File.Copy(actualImagePath, expectImageFilePath, true);
 
+            var filePathInTestResultFolderOfExpectation = SaveToTestresults(expectImageFilePath, "Expected" + Path.GetFileName(expectImageFilePath));
+            var filePathInTestResultFolderOfActual = SaveToTestresults(actualImagePath, Path.GetFileName(actualFullPath));
+
             Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
 
             if (ImageSharpCompare.ImagesAreEqual(actualFullPath, expectFullPath))
             {
+                DroptFilesFromTestResultFolder(filePathInTestResultFolderOfExpectation, filePathInTestResultFolderOfActual);
                 return;
             }
 
@@ -69,12 +77,44 @@ namespace OpenXmlToHtmlTests
                 var resultWithAllowedDiff = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
 
                 Assert.True(resultWithAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}\n");
+
+                DroptFilesFromTestResultFolder(filePathInTestResultFolderOfExpectation, filePathInTestResultFolderOfActual);
                 return;
             }
 
             var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
 
             Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage} \nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
+
+            DroptFilesFromTestResultFolder(filePathInTestResultFolderOfExpectation, filePathInTestResultFolderOfActual);
+        }
+
+        private static void DroptFilesFromTestResultFolder(string filePathInTestResultFolderOfExpectation, string filePathInTestResultFolderOfActual)
+        {
+            File.Delete(filePathInTestResultFolderOfExpectation);
+            File.Delete(filePathInTestResultFolderOfActual);
+        }
+
+        private static string SaveToTestresults(string filePath, string filename)
+        {
+            var netEnvironment = $"NetRuntime{Environment.Version}";
+
+            var testAssemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace("file:\\", "");
+            var testResultDirectory = Path.Combine(testAssemblyDirectory, "../../../../TestResult");
+            if (!Directory.Exists(testResultDirectory))
+            {
+                Directory.CreateDirectory(testResultDirectory);
+            }
+            var destinationPathInTestResultDirectory = Path.Combine(testResultDirectory, netEnvironment + filename);
+
+            if (File.Exists(destinationPathInTestResultDirectory))
+            {
+                File.Delete(destinationPathInTestResultDirectory);
+            }
+
+            File.Copy(filePath, destinationPathInTestResultDirectory);
+
+            return destinationPathInTestResultDirectory;
         }
     }
 }
