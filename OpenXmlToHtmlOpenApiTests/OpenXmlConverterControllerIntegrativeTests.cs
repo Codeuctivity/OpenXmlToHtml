@@ -105,7 +105,7 @@ namespace OpenXmlToHtmlOpenApiTests
             var convertedMarkup = await content.ReadAsStringAsync();
             var document = await context.OpenAsync(req => req.Content(convertedMarkup));
 
-            var actualText = document.QuerySelector(".Codeuctivity-000000")?.TextContent;
+            var actualText = document.QuerySelector(".Codeuctivity-000001")?.TextContent;
             Assert.Equal(expectedText, actualText);
         }
     }

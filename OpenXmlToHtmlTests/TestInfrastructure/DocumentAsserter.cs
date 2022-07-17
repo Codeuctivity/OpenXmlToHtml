@@ -30,6 +30,9 @@ namespace OpenXmlToHtmlTests
             var actualFullPath = Path.GetFullPath(actualImagePath);
             var expectFullPath = Path.GetFullPath(expectImageFilePath);
 
+            // Uncomment following line to update or create an expectaion file
+            //File.Copy(actualImagePath, expectImageFilePath, true);
+
             Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
 
@@ -53,11 +56,11 @@ namespace OpenXmlToHtmlTests
                 await maskImage.SaveAsync(newDiffImage);
             }
 
+            // Uncomment following line to update or create an allowed diff file
+            //File.Copy(newDiffImage, allowedDiffImage, true);
+
             if (File.Exists(allowedDiffImage))
             {
-                // Uncomment following line to update a allowed diff file
-                //File.Copy(actualFullPath, allowedDiffImage, true);
-
                 if (!ImageSharpCompare.ImagesHaveEqualSize(actualFullPath, allowedDiffImage))
                 {
                     Assert.True(false, $"AllowedDiffImage Dimension differs from allowed \nReplace {allowedDiffImage} with {actualFullPath}.");
@@ -70,9 +73,6 @@ namespace OpenXmlToHtmlTests
             }
 
             var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
-
-            // Uncomment following line to create a allowed diff file
-            //File.Copy(actualFullPath, allowedDiffImage, true);
 
             Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage} \nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
         }
