@@ -3,7 +3,6 @@ using Codeuctivity.ImageSharpCompare;
 using SixLabors.ImageSharp;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xunit;
@@ -12,8 +11,6 @@ namespace OpenXmlToHtmlTests
 {
     internal static class DocumentAsserter
     {
-        public static string TestsOutputDirectory => Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Generated");
-
         internal static async Task AssertRenderedHtmlIsEqual(string actualFilePath, string expectReferenceFilePath, int allowedPixelErrorCount)
         {
             var actualFullPath = Path.GetFullPath(actualFilePath);
@@ -34,14 +31,14 @@ namespace OpenXmlToHtmlTests
             var actualFullPath = Path.GetFullPath(actualImagePath);
             var expectFullPath = Path.GetFullPath(expectImageFilePath);
 
-            // Uncomment following line to update or create an expectaion file
+            // Uncomment following line to update or create an expectation file
             //File.Copy(actualImagePath, expectImageFilePath, true);
-
-            var filePathInTestResultFolderOfExpectation = SaveToTestresults(expectImageFilePath, "Expected" + Path.GetFileName(expectImageFilePath));
-            var filePathInTestResultFolderOfActual = SaveToTestresults(actualImagePath, Path.GetFileName(actualFullPath));
 
             Assert.True(File.Exists(actualFullPath), $"actualImagePath not found {actualFullPath}");
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceImagePath not found \n{expectFullPath}\n copy over \n{actualFullPath}\n if this is a new test case.");
+
+            var filePathInTestResultFolderOfExpectation = SaveToTestresults(expectImageFilePath, "Expected" + Path.GetFileName(expectImageFilePath));
+            var filePathInTestResultFolderOfActual = SaveToTestresults(actualImagePath, Path.GetFileName(actualFullPath));
 
             if (ImageSharpCompare.ImagesAreEqual(actualFullPath, expectFullPath))
             {
@@ -99,8 +96,7 @@ namespace OpenXmlToHtmlTests
         {
             var netEnvironment = $"NetRuntime{Environment.Version}";
 
-            var testAssemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Replace("file:\\", "");
-            var testResultDirectory = Path.Combine(testAssemblyDirectory, "../../../../TestResult");
+            var testResultDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../TestResult");
             if (!Directory.Exists(testResultDirectory))
             {
                 Directory.CreateDirectory(testResultDirectory);
