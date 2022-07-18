@@ -2,7 +2,7 @@
 
 Converts docx to html
 
-[![Nuget](https://img.shields.io/nuget/v/OpenXmlToHtml.svg)](https://www.nuget.org/packages/OpenXmlToHtml/) [![Build](https://github.com/Codeuctivity/OpenXmlToHtml/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Codeuctivity/OpenXmlToHtml/actions/workflows/dotnet.yml)
+[![Nuget](https://img.shields.io/nuget/v/Codeuctivity.HtmlRenderer.svg)](https://www.nuget.org/packages/Codeuctivity.HtmlRenderer) [![Build](https://github.com/Codeuctivity/OpenXmlToHtml/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Codeuctivity/OpenXmlToHtml/actions/workflows/dotnet.yml)
 
 - .net implementation
 - No external infrastructure needed (No Microsoft Office or Libre Office needed)
