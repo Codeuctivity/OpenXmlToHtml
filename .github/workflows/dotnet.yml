@@ -33,7 +33,7 @@ jobs:
         path: "TestResult/**/*"
 
   deployRelease:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: windows-latest
     needs: build 
     steps:
@@ -75,7 +75,7 @@ jobs:
           ./OpenXmlToHtmlOpenApi/bin/Release/net6.0/OpenXmlToHtmlOpenApi.zip
 
   deployTest:
-    if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/AzureAppPublishUsingGithubActions' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: windows-latest
     needs: build 
     steps:
@@ -117,7 +117,7 @@ jobs:
           dotnet nuget push .\OpenXmlToHtml\bin\Release\*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
 
   deployAzure:
-    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/AzureAppPublishUsingGithubActions'}}
+    if: ${{ github.ref == 'refs/heads/release' || github.ref == 'refs/heads/AzureAppPublishUsingGithubActions'}}
     runs-on: ubuntu-latest
     needs: build 
     steps:
