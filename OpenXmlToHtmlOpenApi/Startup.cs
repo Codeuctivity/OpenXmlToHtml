@@ -1,10 +1,12 @@
 using Codeuctivity.OpenXmlToHtml;
+using Codeuctivity.OpenXmlToHtml.Tooling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OpenXmlToHtmlOpenApi.Azure;
 using System;
 using System.IO;
 using System.Reflection;
@@ -39,6 +41,12 @@ namespace OpenXmlToHtmlOpenApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IOpenXmlToHtml, OpenXmlToHtml>();
+
+            if (Linux.IsRunningOnAzureLinux())
+            {
+                services.AddSingleton<IHostedService, AzureAndWslSpecificContainerSetup>();
+            }
+
             services.AddApplicationInsightsTelemetry();
             services.AddControllers();
             services.AddSwaggerGen(c =>
