@@ -1,6 +1,5 @@
 ﻿using Codeuctivity.OpenXmlPowerTools;
 using Codeuctivity.OpenXmlToHtml;
-
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Xunit;

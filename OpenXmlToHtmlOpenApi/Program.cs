@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Runtime.InteropServices;
 
 namespace OpenXmlToHtmlOpenApi
 {
@@ -16,23 +14,7 @@ namespace OpenXmlToHtmlOpenApi
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            if (IsRunningOnAzureLinux())
-            {
-                new Azure().SetupChromeiumDependencies();
-            }
-
             CreateHostBuilder(args).Build().Run();
-        }
-
-        private static bool IsRunningOnAzureLinux()
-        {
-            var websiteSku = Environment.GetEnvironmentVariable("WEBSITE_SKU");
-
-            if (string.IsNullOrEmpty(websiteSku))
-            {
-                return false;
-            }
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && websiteSku.Contains("Linux", StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>

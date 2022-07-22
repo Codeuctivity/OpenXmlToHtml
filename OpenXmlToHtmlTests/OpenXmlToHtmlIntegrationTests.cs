@@ -27,8 +27,8 @@ namespace OpenXmlToHtmlTests
         [InlineData("EmptyDocument.docx", 0, false)]
         //[InlineData("WingdingsSymbols.docx", 71000)]
         [InlineData("Symbols.docx", 71000, false)]
-        [InlineData("BasicTextFormated.docx", 10000, false)]
-        [InlineData("Images.docx", 700, true)]
+        [InlineData("BasicTextFormated.docx", 15000, false)]
+        [InlineData("Images.docx", 1400, true)]
         [InlineData("Font.docx", 4500, true)]
         public async Task ShouldConvertDocumentIntegrativeWithKnownAberrancyTest(string testFileName, int allowedPixelErrorCount, bool useWebSafeFonts)
         {
