@@ -12,7 +12,7 @@ namespace OpenXmlToHtmlOpenApiTests
         public async void ShoulSetupChromeiumDependencies()
         {
             Skip.IfNot(RuntimeInformation.IsOSPlatform(OSPlatform.Linux), "Setup code is designed for Ubuntu");
-            Skip.If(IsRunningOnWsl(), "WSL runs without sudo rigths.");
+            Skip.If(System.Environment.UserName != "root");
             var azureSpecificContainerSetup = new AzureAndWslSpecificContainerSetup();
             await azureSpecificContainerSetup.StartAsync(new CancellationToken());
         }
