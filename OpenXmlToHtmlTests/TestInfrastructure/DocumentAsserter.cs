@@ -1,5 +1,6 @@
 ﻿using Codeuctivity.HtmlRenderer;
 using Codeuctivity.ImageSharpCompare;
+using Codeuctivity.OpenXmlToHtml.Tooling;
 using SixLabors.ImageSharp;
 using System;
 using System.IO;
@@ -17,10 +18,22 @@ namespace OpenXmlToHtmlTests
             var expectFullPath = Path.GetFullPath(expectReferenceFilePath);
 
             Assert.True(File.Exists(actualFullPath), $"actualFilePath not found {actualFullPath}");
-            await using var chromiumRenderer = await Renderer.CreateAsync();
-            var pathRasterizedHtml = actualFilePath + ".png";
-            await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
 
+            var pathRasterizedHtml = actualFilePath + ".png";
+            try
+            {
+                await using var chromiumRenderer = await Renderer.CreateAsync();
+                await chromiumRenderer.ConvertHtmlToPng(actualFilePath, pathRasterizedHtml);
+            }
+            catch (PuppeteerSharp.ProcessException exception)
+            {
+                if (exception.Message.Contains("Failed to launch browser!"))
+                {
+                    throw new Exception($"Run '{Linux.ChromiumInstallCommand}' in your test sytem.", exception);
+                }
+
+                throw;
+            }
             Assert.True(File.Exists(expectFullPath), $"ExpectReferenceFilePath not found \n{expectFullPath}\n copy over \n{pathRasterizedHtml}\n if this is a new test case.");
 
             await AssertImageIsEqualAsync(pathRasterizedHtml, expectReferenceFilePath, allowedPixelErrorCount);
