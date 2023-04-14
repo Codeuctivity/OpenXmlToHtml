@@ -13,11 +13,3 @@ Converts docx to html
 ```c#
 await OpenXmlToHtml.ConvertToHtmlAsync(inputPathDocx, outputPathHtml);
 ```
-
-## Fonts and Linux - WIP Section
-
-Some windows specific fonts used in many docx can be installed on linux using
-
-```bash
-sudo apt install ttf-mscorefonts-installer -y && sudo fc-cache -vr
-```
