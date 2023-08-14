@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -40,7 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Codeuctivity.OpenXmlPowerTools" Version="5.1.76-Prerelease" />
+		<PackageReference Include="Codeuctivity.OpenXmlPowerTools" Version="6.0.178" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.43.0.51858">
 			<PrivateAssets>all</PrivateAssets>
