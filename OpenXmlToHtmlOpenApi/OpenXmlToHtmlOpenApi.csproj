@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<UserSecretsId>fd376f00-03ce-419b-883f-bfa8af935ee4</UserSecretsId>
 		<Version Condition="'$(CURRENT_VERSION)' != ''">$(CURRENT_VERSION)</Version>
 		<Version Condition="'$(CURRENT_VERSION)' == ''">0.0.1</Version>
