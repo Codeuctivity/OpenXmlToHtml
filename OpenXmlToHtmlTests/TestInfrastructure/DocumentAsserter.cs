@@ -1,7 +1,7 @@
 ﻿using Codeuctivity.HtmlRenderer;
-using Codeuctivity.ImageSharpCompare;
 using Codeuctivity.OpenXmlToHtml.Tooling;
-using SixLabors.ImageSharp;
+using Codeuctivity.SkiaSharpCompare;
+using SkiaSharp;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -53,7 +53,7 @@ namespace OpenXmlToHtmlTests
             var filePathInTestResultFolderOfExpectation = SaveToTestresults(expectImageFilePath, "Expected" + Path.GetFileName(expectImageFilePath));
             var filePathInTestResultFolderOfActual = SaveToTestresults(actualImagePath, Path.GetFileName(actualFullPath));
 
-            if (ImageSharpCompare.ImagesAreEqual(actualFullPath, expectFullPath))
+            if (Compare.ImagesAreEqual(actualFullPath, expectFullPath))
             {
                 DroptFilesFromTestResultFolder(filePathInTestResultFolderOfExpectation, filePathInTestResultFolderOfActual);
                 return;
@@ -64,27 +64,28 @@ namespace OpenXmlToHtmlTests
             var allowedDiffImage = $"{expectFullPath}.diff.{osSpecificDiffFileSuffix}.png";
             var newDiffImage = $"{actualFullPath}.diff.png";
 
-            if (!ImageSharpCompare.ImagesHaveEqualSize(actualFullPath, expectFullPath))
+            if (!Compare.ImagesHaveEqualSize(actualFullPath, expectFullPath))
             {
-                Assert.True(false, $"Actual Dimension differs from expected \nExpected {expectFullPath}\ndiffers to actual {actualFullPath} \nReplace {expectFullPath} with the new value.");
+                Assert.Fail($"Actual Dimension differs from expected \nExpected {expectFullPath}\ndiffers to actual {actualFullPath} \nReplace {expectFullPath} with the new value.");
             }
 
-            using (var maskImage = ImageSharpCompare.CalcDiffMaskImage(actualFullPath, expectFullPath))
+            using (var maskImage = Compare.CalcDiffMaskImage(actualFullPath, expectFullPath))
             {
-                await maskImage.SaveAsync(newDiffImage);
+                var png = maskImage.Encode(SKEncodedImageFormat.Png, 100);
+                await File.WriteAllBytesAsync(newDiffImage, png.ToArray());
             }
 
             // Uncomment following line to update or create an allowed diff file
-            //File.Copy(newDiffImage, allowedDiffImage, true);
+            // File.Copy(newDiffImage, allowedDiffImage, true);
 
             if (File.Exists(allowedDiffImage))
             {
-                if (!ImageSharpCompare.ImagesHaveEqualSize(actualFullPath, allowedDiffImage))
+                if (!Compare.ImagesHaveEqualSize(actualFullPath, allowedDiffImage))
                 {
-                    Assert.True(false, $"AllowedDiffImage Dimension differs from allowed \nReplace {allowedDiffImage} with {actualFullPath}.");
+                    Assert.Fail($"AllowedDiffImage Dimension differs from allowed \nReplace {allowedDiffImage} with {actualFullPath}.");
                 }
 
-                var resultWithAllowedDiff = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
+                var resultWithAllowedDiff = Compare.CalcDiff(actualFullPath, expectFullPath, allowedDiffImage);
 
                 Assert.True(resultWithAllowedDiff.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {resultWithAllowedDiff.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage}\n");
 
@@ -92,7 +93,7 @@ namespace OpenXmlToHtmlTests
                 return;
             }
 
-            var result = ImageSharpCompare.CalcDiff(actualFullPath, expectFullPath);
+            var result = Compare.CalcDiff(actualFullPath, expectFullPath);
 
             Assert.True(result.PixelErrorCount <= allowedPixelErrorCount, $"Expected PixelErrorCount beyond {allowedPixelErrorCount} but was {result.PixelErrorCount}\nExpected {expectFullPath}\ndiffers to actual {actualFullPath}\n Diff is {newDiffImage} \nReplace {actualFullPath} with the new value or store the diff as {allowedDiffImage}.");
 
