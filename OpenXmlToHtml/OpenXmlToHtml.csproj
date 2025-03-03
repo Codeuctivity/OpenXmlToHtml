@@ -40,7 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Codeuctivity.OpenXmlPowerTools" Version="8.0.310" />
+		<PackageReference Include="Codeuctivity.OpenXmlPowerTools" Version="8.0.314" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="10.6.0.109712">
 			<PrivateAssets>all</PrivateAssets>
