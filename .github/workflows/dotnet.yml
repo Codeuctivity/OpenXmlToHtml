@@ -14,116 +14,88 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
-    - name: Publish Unit Test Results
-      uses: actions/upload-artifact@v4
-      if: failure()
-      with:
-        name: TestResult
-        path: "TestResult/**/*"
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal --configuration Release
+      - name: Publish Unit Test Results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: TestResult
+          path: "TestResult/**/*"
 
   deployRelease:
     if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: windows-latest
-    needs: build 
+    needs: build
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: |
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: |
           dotnet build --configuration Release --no-restore
           dotnet publish ./OpenXmlToHtmlOpenApi -c Release /p:WebPublishMethod=Package
           dotnet publish ./OpenXmlToHtmlCli -c Release
-    - name: Zip 
-      uses: thedoctor0/zip-release@main
-      with:
-        path: .\OpenXmlToHtmlCli\bin\Release\net8.0\win-x64\publish
-        type: 'zip'
-        filename: 'OpenXmlToHtmlCli.zip'
-    - name: NugetPush
-      env: 
+      - name: Zip
+        run: |
+          Compress-Archive -Path ".\OpenXmlToHtmlCli\bin\Release\net8.0\win-x64\publish\*" -DestinationPath ".\OpenXmlToHtmlCli.zip" -Force
+      - name: NugetPush
+        env:
           NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TOKEN }}
-      if:  env.NUGET_TOKEN_EXISTS != ''
-      run: |
+        if: env.NUGET_TOKEN_EXISTS != ''
+        run: |
           dotnet nuget push .\OpenXmlToHtml\bin\Release\*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
-    - name: Github Prelease
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ github.TOKEN }}
-      if:  env.GITHUB_TOKEN != ''
-      run: |
+      - name: Github Prelease
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+        if: env.GITHUB_TOKEN != ''
+        run: |
           gh release create ${{env.CURRENT_VERSION}} ./OpenXmlToHtmlOpenApi/bin/Release/net8.0/OpenXmlToHtmlOpenApi.zip ./OpenXmlToHtmlCli.zip ./OpenXmlToHtml/bin/Release/*.*nupkg --generate-notes
-    
 
   deployTest:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: windows-latest
-    needs: build 
+    needs: build
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: |
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: |
           dotnet build --configuration Release --no-restore
           dotnet publish ./OpenXmlToHtmlOpenApi -c Release /p:WebPublishMethod=Package
           dotnet publish ./OpenXmlToHtmlCli -c Release
-    - name: Zip 
-      uses: thedoctor0/zip-release@main
-      with:
-        path: .\OpenXmlToHtmlCli\bin\Release\net8.0\win-x64\publish
-        type: 'zip'
-        filename: 'OpenXmlToHtmlCli.zip'
-    - name: NugetPush
-      env: 
+      - name: Zip
+        run: |
+          Compress-Archive -Path ".\OpenXmlToHtmlCli\bin\Release\net8.0\win-x64\publish\*" -DestinationPath ".\OpenXmlToHtmlCli.zip" -Force
+      - name: NugetPush
+        env:
           NUGET_TOKEN_EXISTS: ${{ secrets.NUGET_TEST_TOKEN }}
-      if:  env.NUGET_TOKEN_EXISTS != ''
-      run: |
+        if: env.NUGET_TOKEN_EXISTS != ''
+        run: |
           dotnet nuget push .\OpenXmlToHtml\bin\Release\*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TEST_TOKEN}} --source https://apiint.nugettest.org/v3/index.json
-    - name: Github Prelease
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ github.TOKEN }}
-      if:  env.GITHUB_TOKEN != ''
-      run: |
+      - name: Github Prelease
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+        if: env.GITHUB_TOKEN != ''
+        run: |
           gh release create ${{env.CURRENT_VERSION}} ./OpenXmlToHtmlOpenApi/bin/Release/net8.0/OpenXmlToHtmlOpenApi.zip ./OpenXmlToHtmlCli.zip ./OpenXmlToHtml/bin/Release/*.*nupkg  --prerelease --generate-notes
-
-  deployAzure:
-    if: ${{ github.ref == 'refs/heads/release' || github.ref == 'refs/heads/AzureAppPublishUsingGithubActions'}}
-    runs-on: ubuntu-latest
-    needs: build 
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Publish
-      run: dotnet publish ./OpenXmlToHtmlOpenApi/OpenXmlToHtmlOpenApi.csproj --configuration Release -o ./Publish
-    - uses: azure/webapps-deploy@v3
-      with:
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: './Publish'
