@@ -1,8 +1,7 @@
 using Codeuctivity.HtmlRenderer;
 using Codeuctivity.OpenXmlToHtml;
 using PdfSharp.Pdf.IO;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -68,8 +67,8 @@ namespace OpenXmlToHtmlTests
 
         private static bool IsValidBitmap(byte[] blob)
         {
-            var image = Image.Load<Rgba32>(blob);
-            return image.Width > 1 && image.Height > 1;
+            using var image = SKBitmap.Decode(blob);
+            return image != null && image.Width > 1 && image.Height > 1;
         }
 
         [Fact]

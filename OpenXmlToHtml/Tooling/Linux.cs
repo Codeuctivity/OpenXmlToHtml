@@ -4,10 +4,20 @@ using System.Runtime.InteropServices;
 
 namespace Codeuctivity.OpenXmlToHtml.Tooling
 {
-    public class Linux
+    /// <summary>
+    /// Utility class for Linux-specific operations and Azure Linux environment detection
+    /// </summary>
+    public static class Linux
     {
+        /// <summary>
+        /// Command to install Chromium dependencies on Linux systems
+        /// </summary>
         public static readonly string ChromiumInstallCommand = "export DEBIAN_FRONTEND=noninteractive && apt update && apt upgrade -y && apt install mc libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libasound2 libnss3 -y";
 
+        /// <summary>
+        /// Sets up Linux dependencies required for Chromium operation
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when dependency installation fails</exception>
         public static void SetupDependencies()
         {
             var azureLinuxAppChromeDependencies = ChromiumInstallCommand;
@@ -31,10 +41,14 @@ namespace Codeuctivity.OpenXmlToHtml.Tooling
 
             if (process.ExitCode != 0)
             {
-                throw new Exception($"Failed to execute '{ChromiumInstallCommand}'");
+                throw new InvalidOperationException($"Failed to execute '{ChromiumInstallCommand}'");
             }
         }
 
+        /// <summary>
+        /// Determines whether the current environment is running on Azure Linux
+        /// </summary>
+        /// <returns>True if running on Azure Linux, false otherwise</returns>
         public static bool IsRunningOnAzureLinux()
         {
             var websiteSku = Environment.GetEnvironmentVariable("WEBSITE_SKU");

@@ -9,5 +9,11 @@
         "nupkg",
         "snupkg"
     ],
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "dotnet.testDiscovery.enabled": true,
+    "dotnet.testProjectPath": [
+        "OpenXmlToHtmlTests",
+        "OpenXmlToHtmlOpenApiTests"
+    ],
+    "testing.autoRun.mode": "rerun"
 }

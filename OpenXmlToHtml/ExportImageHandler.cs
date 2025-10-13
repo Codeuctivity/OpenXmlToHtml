@@ -33,6 +33,11 @@ namespace Codeuctivity.OpenXmlToHtml
         /// <returns></returns>
         public XElement TransformImage(ImageInfo imageInfo)
         {
+            if (imageInfo?.Image == null)
+            {
+                throw new ArgumentException("ImageInfo or Image cannot be null", nameof(imageInfo));
+            }
+
             var cid = Guid.NewGuid().ToString();
             using var memoryStream = new MemoryStream();
             imageInfo.Image.CopyTo(memoryStream);
@@ -41,7 +46,7 @@ namespace Codeuctivity.OpenXmlToHtml
 
             var cidReference = $"cid: {cid}";
 
-            return new XElement(Xhtml.img, new XAttribute(NoNamespace.src, cidReference), imageInfo.ImgStyleAttribute, imageInfo?.AltText != null ? new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
+            return new XElement(Xhtml.img, new XAttribute(NoNamespace.src, cidReference), imageInfo.ImgStyleAttribute, !string.IsNullOrEmpty(imageInfo.AltText) ? new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
         }
     }
 }
