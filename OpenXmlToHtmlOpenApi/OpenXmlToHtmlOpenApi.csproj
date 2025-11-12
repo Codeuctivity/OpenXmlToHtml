@@ -17,7 +17,7 @@
 	<ItemGroup>
 		<PackageReference Include="Codeuctivity.HtmlRenderer" Version="4.0.458" />
 		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
