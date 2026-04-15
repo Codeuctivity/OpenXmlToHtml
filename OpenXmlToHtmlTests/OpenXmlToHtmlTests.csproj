@@ -10,8 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Codeuctivity.HtmlRenderer" Version="4.0.458" />
-		<PackageReference Include="Codeuctivity.SkiaSharpCompare" Version="2.1.202" />
+		<PackageReference Include="Codeuctivity.HtmlRenderer" Version="4.0.505" />
+		<PackageReference Include="Codeuctivity.SkiaSharpCompare" Version="3.2.263" />
 		<PackageReference Include="coverlet.collector" Version="6.0.4">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -16,8 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-
-    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.8" />
     <ProjectReference Include="..\OpenXmlToHtml\OpenXmlToHtml.csproj" />
   </ItemGroup>
 
